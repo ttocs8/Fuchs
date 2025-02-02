@@ -73,17 +73,27 @@ function DealCards(){
 
 		var imgSrc = "images/cards/" + suit + "/" + rank + ".png";
 		var card = new Card(imgSrc,suit,rank,-1,false);
+		
 		hand.push(card);
 		//console.log(card.getImgSrc());
 	}
+	
+	
 
 	return hand;
 	
 }
 
+function hasDuplicates(a) {
+	return _.uniq(a).length !== a.length; 
+  }
 
 $(document).ready(function(){
 	var Hand = DealCards();
+	
+	while(hasDuplicates(Hand)){
+		Hand = DealCards();
+	}
 	
 	//set hand imgs to respective drawn values from Hand
 	for(var i = 0; i < 6; i++){
