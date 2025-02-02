@@ -1,0 +1,25 @@
+body	{background-image: url("../images/bg.png");
+			 background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+	background-size: cover;	
+	
+}
+#hand {
+	margin: auto;
+	margin-top: 25%;
+	width: 90%;
+	padding: 1px;
+	display: flex;
+	justify-content: center;
+	flex: 0 3 auto;
+}
+.card {
+		
+		display: right;
+		margin: auto;
+		max-width:360px;
+		max-height:570px;
+		width: 200px;
+		height: 316px;
+}
