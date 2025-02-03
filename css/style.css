@@ -15,11 +15,37 @@ body	{background-image: url("../images/bg.png");
 	flex: 0 3 auto;
 }
 .card {
-		
-		display: right;
-		margin: auto;
-		max-width:360px;
-		max-height:570px;
-		width: 200px;
-		height: 316px;
+	display: right;
+	margin: auto;
+	max-width:360px;
+	max-height:570px;
+	width: 200px;
+	height: 316px;
+}
+
+#sortButton {
+	position:absolute;
+	top:260px;
+	left:885px;
+    background-color: rgb(170, 172, 171); 
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	border-radius: 8px;
+	border: 2px solid #0b58a0;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+	font-weight: bold;
+}
+
+#sortButton:hover {
+    background-color: #2194ff; /* Green */
+	border: 2px solid #00152e;
+    color: rgb(0, 0, 0);
+	font-weight: bold;
 }
