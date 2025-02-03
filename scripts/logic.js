@@ -100,9 +100,13 @@ $(document).ready(function(){
 		revert: true
 	});
 	
-	$("#pile").droppable({
+	$("#stich").droppable({
 	accept: '.card',
 	drop: function() {
+		//remove card from Hand
+
+		//add card to stich
+
 		// "card1", "card2" etc
 		var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
 

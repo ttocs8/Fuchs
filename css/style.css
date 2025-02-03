@@ -14,7 +14,7 @@ body	{background-image: url("../images/bg.png");
 	justify-content: center;
 	flex: 0 3 auto;
 }
-#pile {
+#stich {
 	border: 2px solid #00eeff;
 	margin: auto;
 	margin-top: 5%;
