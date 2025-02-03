@@ -157,6 +157,7 @@ $(document).ready(function(){
 
 	$("#sortButton").click(function(){	
 		if(playerHand.cards.length > 0) {
+			var hand = $("#hand").children().toArray();
 			deselectCardsInHand(playerHand.cards);
 
 			//sort
@@ -165,10 +166,9 @@ $(document).ready(function(){
 			});
 
 			//redraw cards
-			for(var i = 0; i < 6; i++){
-				var cardNum = "#card";
-				cardNum += i + 1;
-				$(cardNum).prop("src", playerHand.cards[i].imgsrc);
+			
+			for(var i = 0; i < hand.length; i++){
+				$(hand[i]).prop("src", playerHand.cards[i].imgsrc);
 			}
 		}
 	});
