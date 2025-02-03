@@ -11,7 +11,7 @@ body	{background-image: url("../images/bg.png");
 	height: 100%;
 }
 #hand {
-	border: 2px solid #ff00d4;
+	/* border: 2px solid #ff00d4; */
 	margin: auto;
 	margin-top: 1%;
 	width: 75vw;
@@ -21,7 +21,7 @@ body	{background-image: url("../images/bg.png");
 	flex: 3 3 auto;
 }
 #stich {
-	border: 2px solid #00eeff;
+	border: 2px solid #00eeff; 
 	margin: auto;
 	margin-top: 2%;
 	height: 40vh;
@@ -37,7 +37,7 @@ body	{background-image: url("../images/bg.png");
 	max-height:26vh;
 	width: auto;
 	height: auto;
-	border: 2px solid #ff0000;
+	/* border: 2px solid #ff0000; */
 }
 
 #sortButton {
