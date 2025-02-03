@@ -81,10 +81,24 @@ function Deck()
 	}
 }
 
+function Hand()
+{
+	this.cards = [];
+
+	this.deal = function(deck){
+		this.cards = deck.getCards(6);
+	}
+
+	this.add = function(card){
+		this.cards.push(card);
+	}
+}
+
 function deselectCardsInHand(hand, skipThisCard) {
-	for(i = 0; i < 6; i++){
+	for(i = 0; i < hand.length; i++){
 		if(i !== "undefined" && i == skipThisCard)
 			continue;
+
 		else {
 			var cardID = "#card" + parseInt(i+1);
 			if(hand[i].isSelected)
@@ -96,76 +110,86 @@ function deselectCardsInHand(hand, skipThisCard) {
 }
 
 $(document).ready(function(){
+	//DECK
+	var deck = new Deck();
+	deck.shuffle();
+	console.log(deck.getNumCards());
+
+	//PLAYER HANDS
+	var playerHand = new Hand();
+	playerHand.deal(deck);
+	console.log(deck.getNumCards());
+
+	//STICH
+	var stich = new Hand();
+	
 	$(".card").draggable({
 		revert: true
 	});
 	
 	$("#stich").droppable({
-	accept: '.card',
-	drop: function() {
-		//remove card from Hand
+		accept: '.card',
+		drop: function(event, ui) {
+			$(this).append($(ui.draggable));
+			ui.draggable.draggable({disabled: true});
+			var cardToProcess = $(ui.draggable).attr('src');
+			
+ 
+			//add card to stich
+			var card = playerHand.cards.find(x => x.imgsrc === cardToProcess);
+			stich.add(card);
 
-		//add card to stich
+			//remove card from players Hand
+			playerHand.cards = playerHand.cards.filter(e => e.order !== card.order)
 
-		// "card1", "card2" etc
-		var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
+			deselectCardsInHand(playerHand.cards);
 
-		if(Hand[handCardNum].isSelected){
-			Hand[handCardNum].isSelected = false;
-			$(this).animate({marginTop: '+=30px'},150);
 		}
-		else { 
-			Hand[handCardNum].isSelected = true;
-			$(this).animate({marginTop: '-=30px'},150);
-			deselectCardsInHand(Hand,handCardNum);
-		}
-	}
 	});
 
-	var deck = new Deck();
-	console.log(deck.getNumCards());
-	deck.shuffle();
-	var Hand = deck.getCards(6);
-	console.log(deck.getNumCards());
 	
 	//set hand imgs to respective drawn values from Hand
 	for(var i = 0; i < 6; i++){
 		var cardNum = "#card";
 		cardNum += i+1;
-		$(cardNum).prop("src", Hand[i].imgsrc);
+		$(cardNum).prop("src", playerHand.cards[i].imgsrc);
 	}
 
 	$("#sortButton").click(function(){	
-		deselectCardsInHand(Hand);
+		if(playerHand.cards.length > 0) {
+			deselectCardsInHand(playerHand.cards);
 
-		//sort
-		Hand.sort(function(a, b) {
-			return a.order - b.order;
-		});
+			//sort
+			playerHand.cards.sort(function(a, b) {
+				return a.order - b.order;
+			});
 
-		//redraw cards
-		for(var i = 0; i < 6; i++){
-			var cardNum = "#card";
-			cardNum += i + 1;
-			$(cardNum).prop("src", Hand[i].imgsrc);
+			//redraw cards
+			for(var i = 0; i < 6; i++){
+				var cardNum = "#card";
+				cardNum += i + 1;
+				$(cardNum).prop("src", playerHand.cards[i].imgsrc);
+			}
 		}
 	});
 
 	
 	$(".card").click(function(){
-		// "card1", "card2" etc
-		var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
+		var parent = $(this).parent().attr('id');
+		if(!parent.includes("stich")){
+			// "card1", "card2" etc
+			var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
 
-		if(Hand[handCardNum].isSelected){
-			Hand[handCardNum].isSelected = false;
-			$(this).animate({marginTop: '+=30px'},150);
+			if(playerHand.cards[handCardNum].isSelected){
+				playerHand.cards[handCardNum].isSelected = false;
+				$(this).animate({marginTop: '+=30px'},150);
+			}
+			else { 
+				playerHand.cards[handCardNum].isSelected = true;
+				$(this).animate({marginTop: '-=30px'},150);
+				deselectCardsInHand(playerHand.cards,handCardNum);
+			}
 		}
-		else { 
-			Hand[handCardNum].isSelected = true;
-			$(this).animate({marginTop: '-=30px'},150);
-			deselectCardsInHand(Hand,handCardNum);
-		}
-		
 		
     });
 

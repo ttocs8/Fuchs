@@ -5,21 +5,27 @@ body	{background-image: url("../images/bg.png");
 	background-size: cover;	
 	
 }
+
+#main {
+	text-align: center;
+	height: 100%;
+}
 #hand {
+	border: 2px solid #ff00d4;
 	margin: auto;
-	margin-top: 15%;
-	width: 75%;
+	margin-top: 1%;
+	width: 75vw;
 	padding: 1px;
 	display: flex;
 	justify-content: center;
-	flex: 0 3 auto;
+	flex: 3 3 auto;
 }
 #stich {
 	border: 2px solid #00eeff;
 	margin: auto;
-	margin-top: 5%;
-	width: 75%;
-	padding: 50px;
+	margin-top: 2%;
+	height: 40vh;
+	width: 95vw;
 	display: flex;
 	justify-content: center;
 	flex: 0 3 auto;
@@ -27,16 +33,18 @@ body	{background-image: url("../images/bg.png");
 .card {
 	display: right;
 	margin: auto;
-	max-width:360px;
-	max-height:570px;
-	width: 200px;
-	height: 316px;
+	max-width:16vw;
+	max-height:26vh;
+	width: auto;
+	height: auto;
+	border: 2px solid #ff0000;
 }
 
 #sortButton {
-	position:absolute;
-	top:260px;
-	left:885px;
+	display: block;
+	justify-content: center;
+	margin-top: 1%;
+	
     background-color: rgb(222, 224, 223); 
     border: none;
     color: black;
