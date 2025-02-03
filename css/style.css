@@ -7,9 +7,19 @@ body	{background-image: url("../images/bg.png");
 }
 #hand {
 	margin: auto;
-	margin-top: 25%;
-	width: 90%;
+	margin-top: 15%;
+	width: 75%;
 	padding: 1px;
+	display: flex;
+	justify-content: center;
+	flex: 0 3 auto;
+}
+#pile {
+	border: 2px solid #00eeff;
+	margin: auto;
+	margin-top: 5%;
+	width: 75%;
+	padding: 50px;
 	display: flex;
 	justify-content: center;
 	flex: 0 3 auto;
@@ -27,7 +37,7 @@ body	{background-image: url("../images/bg.png");
 	position:absolute;
 	top:260px;
 	left:885px;
-    background-color: rgb(170, 172, 171); 
+    background-color: rgb(222, 224, 223); 
     border: none;
     color: black;
     padding: 16px 32px;
@@ -44,7 +54,7 @@ body	{background-image: url("../images/bg.png");
 }
 
 #sortButton:hover {
-    background-color: #2194ff; /* Green */
+    background-color: #2194ff;
 	border: 2px solid #00152e;
     color: rgb(0, 0, 0);
 	font-weight: bold;

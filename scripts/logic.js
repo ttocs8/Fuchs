@@ -29,6 +29,7 @@ class Card
 	order = -1;
 	value = -1;
 	imgsrc = "undefined";
+	isSelected = false;
 	constructor(suit, rank, value, isTrump) {
 		
 		this.suit = suit;
@@ -73,15 +74,55 @@ function Deck()
 		  returnCards.push(this.cards.pop());
 		}
 		return returnCards;
-	  }
+	}
+
+	this.getNumCards = function(){
+		return this.cards.length;
+	}
 }
 
+function deselectCardsInHand(hand, skipThisCard) {
+	for(i = 0; i < 6; i++){
+		if(i !== "undefined" && i == skipThisCard)
+			continue;
+		else {
+			var cardID = "#card" + parseInt(i+1);
+			if(hand[i].isSelected)
+				$(cardID).animate({marginTop: '+=30px'},150);
+
+			hand[i].isSelected = false;
+		}
+	}
+}
 
 $(document).ready(function(){
+	$(".card").draggable({
+		revert: true
+	});
 	
+	$("#pile").droppable({
+	accept: '.card',
+	drop: function() {
+		// "card1", "card2" etc
+		var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
+
+		if(Hand[handCardNum].isSelected){
+			Hand[handCardNum].isSelected = false;
+			$(this).animate({marginTop: '+=30px'},150);
+		}
+		else { 
+			Hand[handCardNum].isSelected = true;
+			$(this).animate({marginTop: '-=30px'},150);
+			deselectCardsInHand(Hand,handCardNum);
+		}
+	}
+	});
+
 	var deck = new Deck();
+	console.log(deck.getNumCards());
 	deck.shuffle();
 	var Hand = deck.getCards(6);
+	console.log(deck.getNumCards());
 	
 	//set hand imgs to respective drawn values from Hand
 	for(var i = 0; i < 6; i++){
@@ -90,18 +131,39 @@ $(document).ready(function(){
 		$(cardNum).prop("src", Hand[i].imgsrc);
 	}
 
-	$("#sortButton").click(function(){		
+	$("#sortButton").click(function(){	
+		deselectCardsInHand(Hand);
+
 		//sort
 		Hand.sort(function(a, b) {
 			return a.order - b.order;
 		});
 
+		//redraw cards
 		for(var i = 0; i < 6; i++){
 			var cardNum = "#card";
-			cardNum += i+1;
+			cardNum += i + 1;
 			$(cardNum).prop("src", Hand[i].imgsrc);
 		}
 	});
+
+	
+	$(".card").click(function(){
+		// "card1", "card2" etc
+		var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
+
+		if(Hand[handCardNum].isSelected){
+			Hand[handCardNum].isSelected = false;
+			$(this).animate({marginTop: '+=30px'},150);
+		}
+		else { 
+			Hand[handCardNum].isSelected = true;
+			$(this).animate({marginTop: '-=30px'},150);
+			deselectCardsInHand(Hand,handCardNum);
+		}
+		
+		
+    });
 
 	
 });
