@@ -13,7 +13,7 @@ body	{background-image: url("../images/bg.png");
 #hand {
 	/* border: 2px solid #ff00d4; */
 	margin: auto;
-	margin-top: 1%;
+	margin-top: 5%;
 	width: 75vw;
 	padding: 1px;
 	display: flex;
@@ -41,9 +41,9 @@ body	{background-image: url("../images/bg.png");
 }
 
 #sortButton {
-	display: block;
+	
 	justify-content: center;
-	margin-top: 1%;
+	margin-top: 3%;
 	
     background-color: rgb(222, 224, 223); 
     border: none;
@@ -54,7 +54,7 @@ body	{background-image: url("../images/bg.png");
     display: inline-block;
     font-size: 16px;
 	border-radius: 8px;
-	border: 2px solid #0b58a0;
+	border: 2px solid #3ca1ff;
     -webkit-transition-duration: 0.4s; 
     transition-duration: 0.4s;
     cursor: pointer;
@@ -63,6 +63,34 @@ body	{background-image: url("../images/bg.png");
 
 #sortButton:hover {
     background-color: #2194ff;
+	border: 2px solid #00152e;
+    color: rgb(0, 0, 0);
+	font-weight: bold;
+}
+
+#callButton {
+	
+	justify-content: center;
+	margin-top: 3%;
+	margin-left: 15%;
+    background-color: rgb(255, 188, 167); 
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	border-radius: 8px;
+	border: 2px solid #eb2d0b;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+	font-weight: bold;
+}
+
+#callButton:hover {
+    background-color: #c23d1c;
 	border: 2px solid #00152e;
     color: rgb(0, 0, 0);
 	font-weight: bold;

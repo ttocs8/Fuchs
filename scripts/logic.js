@@ -94,35 +94,34 @@ function Hand()
 	}
 }
 
-function deselectCardsInHand(hand, skipThisCard) {
-	for(i = 0; i < hand.length; i++){
-		if(i !== "undefined" && i == skipThisCard)
-			continue;
+function showOrHideCallButton(theHand) {
+	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
-		else {
-			var cardID = "#card" + parseInt(i+1);
-			if(hand[i].isSelected)
-				$(cardID).animate({marginTop: '+=30px'},150);
+	if (!hasGrosseFuchs)
+		$("#callButton").hide();
 
-			hand[i].isSelected = false;
-		}
-	}
+	else
+		$("#callButton").show();
 }
 
 $(document).ready(function(){
-	//DECK
+	/////DECK
 	var deck = new Deck();
 	deck.shuffle();
 	console.log(deck.getNumCards());
 
-	//PLAYER HANDS
+	/////PLAYER HANDS
 	var playerHand = new Hand();
 	playerHand.deal(deck);
 	console.log(deck.getNumCards());
 
-	//STICH
+	/////STICH
 	var stich = new Hand();
 	
+	//Show call button if you have grosse fuchs
+	showOrHideCallButton(playerHand);
+
+
 	$(".card").draggable({
 		revert: true
 	});
@@ -134,7 +133,6 @@ $(document).ready(function(){
 			ui.draggable.draggable({disabled: true});
 			var cardToProcess = $(ui.draggable).attr('src');
 			
- 
 			//add card to stich
 			var card = playerHand.cards.find(x => x.imgsrc === cardToProcess);
 			stich.add(card);
@@ -142,8 +140,7 @@ $(document).ready(function(){
 			//remove card from players Hand
 			playerHand.cards = playerHand.cards.filter(e => e.order !== card.order)
 
-			deselectCardsInHand(playerHand.cards);
-
+			showOrHideCallButton(playerHand);
 		}
 	});
 
@@ -158,7 +155,6 @@ $(document).ready(function(){
 	$("#sortButton").click(function(){	
 		if(playerHand.cards.length > 0) {
 			var hand = $("#hand").children().toArray();
-			deselectCardsInHand(playerHand.cards);
 
 			//sort
 			playerHand.cards.sort(function(a, b) {
@@ -166,34 +162,10 @@ $(document).ready(function(){
 			});
 
 			//redraw cards
-			
 			for(var i = 0; i < hand.length; i++){
 				$(hand[i]).prop("src", playerHand.cards[i].imgsrc);
 			}
 		}
 	});
-
-	
-	$(".card").click(function(){
-		var parent = $(this).parent().attr('id');
-		if(!parent.includes("stich")){
-			// "card1", "card2" etc
-			var handCardNum = parseInt($(this).attr('id').slice(-1)) - 1;
-
-			if(playerHand.cards[handCardNum].isSelected){
-				playerHand.cards[handCardNum].isSelected = false;
-				$(this).animate({marginTop: '+=30px'},150);
-			}
-			else { 
-				playerHand.cards[handCardNum].isSelected = true;
-				$(this).animate({marginTop: '-=30px'},150);
-				deselectCardsInHand(playerHand.cards,handCardNum);
-			}
-		}
-		
-    });
-
 	
 });
-	
-
