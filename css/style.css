@@ -95,3 +95,14 @@ body	{background-image: url("../images/bg.png");
     color: rgb(0, 0, 0);
 	font-weight: bold;
 }
+
+.callCard {
+	display: right;
+	position: relative;
+	top: 4vh;
+	max-width:100vw;
+	max-height:100vh;
+	width: auto;
+	height: auto;
+	/* border: 2px solid #ff0000; */
+}

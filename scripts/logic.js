@@ -1,4 +1,6 @@
 const CARDINFOMAP = new Map();
+
+// suit_rank, [order, value, trumpf]
 CARDINFOMAP.set("eichel_Ober", [1,4,true]);
 CARDINFOMAP.set("grune_Ober", [2,3,true]);
 CARDINFOMAP.set("eichel_Bauer", [3,2,true]);
@@ -49,7 +51,6 @@ function Deck()
 {
 	this.cards = [];
 	for (let [key, value] of CARDINFOMAP) {
-	
 		suit = key.substring(0, key.indexOf("_"));
 		rank = key.split('_').pop();
 		val = value[1];
@@ -94,13 +95,15 @@ function Hand()
 }
 
 function toggleCallButton(theHand) {
+	$(".callCard").hide();
 	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
-	if (!hasGrosseFuchs)
+	if (!hasGrosseFuchs){
 		$("#callButton").hide();
-
-	else
+	}
+	else {
 		$("#callButton").show();
+	}
 }
 
 $(document).ready(function(){
@@ -119,7 +122,6 @@ $(document).ready(function(){
 	
 	//Show call button if you have grosse fuchs
 	toggleCallButton(playerHand);
-
 
 	$(".card").draggable({
 		revert: true
@@ -166,6 +168,10 @@ $(document).ready(function(){
 				$(hand[i]).prop("src", playerHand.cards[i].imgsrc);
 			}
 		}
+	});
+
+	$("#callButton").click(function(){	
+		$(".callCard").show();
 	});
 	
 });
