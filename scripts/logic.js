@@ -1,48 +1,47 @@
 const CARDINFOMAP = new Map();
-CARDINFOMAP.set("eichel_Ober", [1,4]);
-CARDINFOMAP.set("grune_Ober", [2,3]);
-CARDINFOMAP.set("eichel_Bauer", [3,2]);
-CARDINFOMAP.set("grune_Bauer", [4,2]);
-CARDINFOMAP.set("rote_Bauer", [5,2]);
-CARDINFOMAP.set("schelle_Bauer", [6,2]);
-CARDINFOMAP.set("rote_Ass", [7,11]);
-CARDINFOMAP.set("rote_Zehner", [8,10]);
-CARDINFOMAP.set("rote_Koenig", [9,4]);
-CARDINFOMAP.set("rote_Ober", [10,3]);
-CARDINFOMAP.set("rote_Neuner", [11,0]);
-CARDINFOMAP.set("rote_Achter", [12,0]);
-CARDINFOMAP.set("eichel_Ass", [13,11]);
-CARDINFOMAP.set("eichel_Zehner", [14,10]);
-CARDINFOMAP.set("eichel_Koenig", [15,4]);
-CARDINFOMAP.set("eichel_Neuner", [16,0]);
-CARDINFOMAP.set("grune_Ass", [17,11]);
-CARDINFOMAP.set("grune_Zehner", [18,10]);
-CARDINFOMAP.set("grune_Koenig", [19,4]);
-CARDINFOMAP.set("grune_Neuner", [20,0]);
-CARDINFOMAP.set("schelle_Ass", [21,11]);
-CARDINFOMAP.set("schelle_Zehner", [22,10]);
-CARDINFOMAP.set("schelle_Koenig", [23,4]);
-CARDINFOMAP.set("schelle_Ober", [24,3]);
+CARDINFOMAP.set("eichel_Ober", [1,4,true]);
+CARDINFOMAP.set("grune_Ober", [2,3,true]);
+CARDINFOMAP.set("eichel_Bauer", [3,2,true]);
+CARDINFOMAP.set("grune_Bauer", [4,2,true]);
+CARDINFOMAP.set("rote_Bauer", [5,2,true]);
+CARDINFOMAP.set("schelle_Bauer", [6,2,true]);
+CARDINFOMAP.set("rote_Ass", [7,11,true]);
+CARDINFOMAP.set("rote_Zehner", [8,10,true]);
+CARDINFOMAP.set("rote_Koenig", [9,4,true]);
+CARDINFOMAP.set("rote_Ober", [10,3,true]);
+CARDINFOMAP.set("rote_Neuner", [11,0,true]);
+CARDINFOMAP.set("rote_Achter", [12,0,true]);
+
+CARDINFOMAP.set("eichel_Ass", [13,11,false]);
+CARDINFOMAP.set("eichel_Zehner", [14,10,false]);
+CARDINFOMAP.set("eichel_Koenig", [15,4,false]);
+CARDINFOMAP.set("eichel_Neuner", [16,0,false]);
+
+CARDINFOMAP.set("grune_Ass", [17,11,false]);
+CARDINFOMAP.set("grune_Zehner", [18,10,false]);
+CARDINFOMAP.set("grune_Koenig", [19,4,false]);
+CARDINFOMAP.set("grune_Neuner", [20,0,false]);
+
+CARDINFOMAP.set("schelle_Ass", [21,11,false]);
+CARDINFOMAP.set("schelle_Zehner", [22,10,false]);
+CARDINFOMAP.set("schelle_Koenig", [23,4,false]);
+CARDINFOMAP.set("schelle_Ober", [24,3,false]);
 
 class Card
 {
 	order = -1;
 	value = -1;
 	imgsrc = "undefined";
-	isSelected = false;
-	constructor(suit, rank, value, isTrump) {
+	constructor(suit, rank, value) {
 		
 		this.suit = suit;
 		this.rank = rank;
 		this.value = value;
 		this.imgsrc = "images/cards/" + suit + "/" + rank + ".png";
 		this.order = CARDINFOMAP.get(this.suit + "_" + this.rank)[0];
-		this.isTrump = isTrump;
-	}
-
-	getImgSrc()
-	{
-		return this.imgsrc;
+		this.isTrump = CARDINFOMAP.get(this.suit + "_" + this.rank)[2];
+		if(this.isTrump)
+			this.suit = "trumpf"
 	}
 }
 
@@ -94,7 +93,7 @@ function Hand()
 	}
 }
 
-function showOrHideCallButton(theHand) {
+function toggleCallButton(theHand) {
 	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
 	if (!hasGrosseFuchs)
@@ -108,18 +107,18 @@ $(document).ready(function(){
 	/////DECK
 	var deck = new Deck();
 	deck.shuffle();
-	console.log(deck.getNumCards());
+	//console.log(deck.getNumCards());
 
 	/////PLAYER HANDS
 	var playerHand = new Hand();
 	playerHand.deal(deck);
-	console.log(deck.getNumCards());
+	//console.log(deck.getNumCards());
 
 	/////STICH
 	var stich = new Hand();
 	
 	//Show call button if you have grosse fuchs
-	showOrHideCallButton(playerHand);
+	toggleCallButton(playerHand);
 
 
 	$(".card").draggable({
@@ -129,18 +128,19 @@ $(document).ready(function(){
 	$("#stich").droppable({
 		accept: '.card',
 		drop: function(event, ui) {
-			$(this).append($(ui.draggable));
 			ui.draggable.draggable({disabled: true});
-			var cardToProcess = $(ui.draggable).attr('src');
-			
+
 			//add card to stich
+			$(this).append($(ui.draggable));
+			var cardToProcess = $(ui.draggable).attr('src');
+
 			var card = playerHand.cards.find(x => x.imgsrc === cardToProcess);
 			stich.add(card);
 
 			//remove card from players Hand
 			playerHand.cards = playerHand.cards.filter(e => e.order !== card.order)
 
-			showOrHideCallButton(playerHand);
+			toggleCallButton(playerHand);
 		}
 	});
 
