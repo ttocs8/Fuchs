@@ -100,9 +100,11 @@ function toggleCallButton(theHand) {
 
 	if (!hasGrosseFuchs){
 		$("#callButton").hide();
+		$(".callCard").hide();
 	}
 	else {
 		$("#callButton").show();
+		
 	}
 }
 
@@ -170,8 +172,17 @@ $(document).ready(function(){
 		}
 	});
 
+	var callButtonToggle = false;
 	$("#callButton").click(function(){	
-		$(".callCard").show();
+		if(!callButtonToggle){
+			callButtonToggle = true;
+			$(".callCard").show();
+
+		}
+		else {
+			callButtonToggle = false;
+			$(".callCard").hide();
+		}
 	});
 	
 });
