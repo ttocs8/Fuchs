@@ -95,12 +95,12 @@ function Hand()
 }
 
 function toggleCallButton(theHand) {
-	$(".callCard").hide();
+	$(".callCardSuit").hide();
 	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
 	if (!hasGrosseFuchs){
 		$("#callButton").hide();
-		$(".callCard").hide();
+		$(".callCardSuit").hide();
 	}
 	else {
 		$("#callButton").show();
@@ -124,6 +124,7 @@ $(document).ready(function(){
 	
 	//Show call button if you have grosse fuchs
 	toggleCallButton(playerHand);
+	$("#UI_CALL_CARD_container").hide();
 
 	$(".card").draggable({
 		revert: true
@@ -173,16 +174,43 @@ $(document).ready(function(){
 	});
 
 	var callButtonToggle = false;
+	var calledCardSuit = "undefined";
+	var calledCardRank = "undefined";
+	var theCalledCard = null;
+
 	$("#callButton").click(function(){	
+		calledCardSuit = "undefined";
+		calledCardRank = "undefined";
+		theCalledCard = null;
+		$("#UI_CALL_CARD_container").show();
+
 		if(!callButtonToggle){
-			callButtonToggle = true;
-			$(".callCard").show();
+				callButtonToggle = true;
+				$(".callCardSuit").show();
 
 		}
 		else {
-			callButtonToggle = false;
-			$(".callCard").hide();
+				callButtonToggle = false;
+				$(".callCardSuit").hide();
 		}
-	});
 	
+	});
+
+	$(".callCardSuit").click(function(){	
+			var callCardsArray = $("#callCardOptions").children().toArray();
+
+			if(callCardsArray.length > 1){
+				var cardSrc = $(this).attr('src');
+				var suit = cardSrc.substring(cardSrc.indexOf("_")+1, cardSrc.length-4);
+
+				//hide the cards user did not select
+				var otherCallCards = callCardsArray.filter(x => !x.src.includes(suit));
+				otherCallCards.forEach(element => {
+					$(element).hide();
+				});
+			}
+			
+			//var calledCardDir = "images/card"
+
+	});
 });

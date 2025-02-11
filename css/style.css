@@ -6,10 +6,29 @@ body	{background-image: url("../images/bg.png");
 	
 }
 
-#main {
+#content {
 	text-align: center;
 	height: 100%;
 }
+
+#UI_CALL_CARD_container {
+	position:absolute;
+	top:1vh;
+	z-index:10;
+	margin: auto;
+	height: 98vh;
+	width: 99vw;
+	background-color:rgba(0, 0, 0, 0.5);
+}
+
+#UI_CALL_CARD_menu {
+	margin: auto;
+	margin-top: 5%;
+	background-color:rgba(216, 216, 216);
+	height: 75vh;
+	width: 50vw;
+}
+
 #hand {
 	/* border: 2px solid #ff00d4; */
 	margin: auto;
@@ -96,12 +115,23 @@ body	{background-image: url("../images/bg.png");
 	font-weight: bold;
 }
 
-.callCard {
+.callCardSuit {
 	display: right;
 	position: relative;
 	top: 4vh;
 	max-width:100vw;
 	max-height:100vh;
+	width: auto;
+	height: auto;
+	/* border: 2px solid #ff0000; */
+}
+
+.callCardRanks {
+	display: right;
+	position: relative;
+	top: 4vh;
+	max-width:75vw;
+	max-height:75vh;
 	width: auto;
 	height: auto;
 	/* border: 2px solid #ff0000; */
