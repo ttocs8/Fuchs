@@ -29,6 +29,8 @@ CARDINFOMAP.set("schelle_Zehner", [22,10,false]);
 CARDINFOMAP.set("schelle_Koenig", [23,4,false]);
 CARDINFOMAP.set("schelle_Ober", [24,3,false]);
 
+const RanksArray = ["Ass","Zehner","Koenig","Ober","Bauer","Neuner","Achter"];
+
 class Card
 {
 	order = -1;
@@ -182,35 +184,76 @@ $(document).ready(function(){
 		calledCardSuit = "undefined";
 		calledCardRank = "undefined";
 		theCalledCard = null;
-		$("#UI_CALL_CARD_container").show();
-
+	
 		if(!callButtonToggle){
 				callButtonToggle = true;
+				$("#UI_CALL_CARD_container").show();
+				$("#UI_CALL_CARD_menu").show();
 				$(".callCardSuit").show();
+		
 
 		}
 		else {
 				callButtonToggle = false;
-				$(".callCardSuit").hide();
+				$("#UI_CALL_CARD_container").hide();
 		}
 	
 	});
 
 	$(".callCardSuit").click(function(){	
-			var callCardsArray = $("#callCardOptions").children().toArray();
+		
+			var cardSrc = $(this).attr('src');
+			var suit = cardSrc.substring(cardSrc.indexOf("_")+1, cardSrc.length-4);
+			if(suit.includes("selected"))
+				suit = suit.substring(0,suit.indexOf("_"));
 
-			if(callCardsArray.length > 1){
-				var cardSrc = $(this).attr('src');
-				var suit = cardSrc.substring(cardSrc.indexOf("_")+1, cardSrc.length-4);
+			var callCardsSuits = $("#callSuitOptions").children().toArray();
 
-				//hide the cards user did not select
-				var otherCallCards = callCardsArray.filter(x => !x.src.includes(suit));
-				otherCallCards.forEach(element => {
-					$(element).hide();
+			if(!cardSrc.includes("selected")){
+				$(this).attr('src', "images/call_" + suit + "_selected.png");
+				
+				var otherCallSuits = callCardsSuits.filter(x => !x.src.includes(suit));
+				otherCallSuits.forEach(element => {
+					if(element.src.includes("selected")){
+						var tempsuit = element.src.substring(element.src.indexOf("_")+1, element.src.length-4);
+						var tempsuit2 = tempsuit.substring(0,tempsuit.indexOf("_"));
+						$(element).attr('src',"images/call_" + tempsuit2 + ".png");
+					}
 				});
+			}else
+			{
+				$(this).attr('src', "images/call_" + suit + ".png");
 			}
+
+			switch(suit) {
+				case "eichel":
+					//change to select image
+					var dir = "images\\cards\\eichel\\";
+					for(i = 0; i < RanksArray.length-1; i++){
+						$(".callCardRanks").attr('src', dir + RanksArray[i] + ".png");
+					}
+					
+				  break;
+				case "grune":
+				  // code block
+				  break;
+				case "rote":
+				  // code block
+				  break;
+				case "schelle":
+				  // code block
+				  break;
+				default:
+				  // code block
+			  }
+	
 			
 			//var calledCardDir = "images/card"
 
+	});
+
+	$("#CLOSE").click(function(){
+		$("#UI_CALL_CARD_container").hide();
+		callButtonToggle = false;
 	});
 });

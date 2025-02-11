@@ -128,10 +128,9 @@ body	{background-image: url("../images/bg.png");
 
 .callCardRanks {
 	display: right;
-	position: relative;
-	top: 4vh;
-	max-width:75vw;
-	max-height:75vh;
+	margin: auto;
+	max-width:16vw;
+	max-height:26vh;
 	width: auto;
 	height: auto;
 	/* border: 2px solid #ff0000; */
