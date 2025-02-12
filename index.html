@@ -19,31 +19,41 @@
 	
 	<body id="content">
 		<div id="UI_CALL_CARD_container">
+			
 			<div id="UI_CALL_CARD_menu">
-				<span id="callSuitOptions">
+				
+				<button id="CLOSE">CLOSE</u></button>
+				
+				<div id="callSuitOptions">
 					<img id="callsuit1" class="callCardSuit" src="images/call_eichel.png"/> 
 					<img id="callsuit2" class="callCardSuit" src="images/call_grune.png"/> 
 					<img id="callsuit3" class="callCardSuit" src="images/call_rote.png"/> 
 					<img id="callsuit4" class="callCardSuit" src="images/call_schelle.png"/> 
-				</span>
-					<img id=".callrank1" class=".callrankRanks" src="" alt=""/>
-					<img id=".callrank2" class=".callrankRanks" src=" " alt=""/>
-					<img id=".callrank3" class=".callrankRanks" src=" " alt=""/>
-					<img id=".callrank4" class=".callrankRanks" src=" " alt=""/>
-					<img id=".callrank5" class=".callrankRanks" src=" " alt=""/>
-					<img id=".callrank6" class=".callrankRanks" src=" " alt=""/>
+					
+				</div>
 
-					<img id=".callrank7" class=".callrankRanks" src=" " alt=""/>
-
-					<button id="CLOSE">CLOSE</u></button>
+				<div id="callCardOptions">
+					<img id="callrank1" class="callCardRanks" src="" alt=""/>
+					<img id="callrank2" class="callCardRanks" src=" " alt=""/>
+					<img id="callrank3" class="callCardRanks" src=" " alt=""/>
+					<img id="callrank4" class="callCardRanks" src=" " alt=""/>
+					<img id="callrank5" class="callCardRanks" src=" " alt=""/>
+					<img id="callrank6" class="callCardRanks" src=" " alt=""/>
+					<img id="callrank7" class="callCardRanks" src=" " alt=""/>
+				</div>
+					
 			</div>
 		</div>
 
-		<span id="TABLE">
+		<span id="TABLE">	
+			<span style = "position: absolute; margin-top: 1%; font-weight: bolder; font-family: Assistant; color:white; ">
+				STICH
+			</span>
 			<div id="stich">
 				
 			</div>
 
+			
 			<div id="hand">
 				<img id="card1"  class="card" src=" " alt=""/>
 				<img id="card2"  class="card" src=" " alt=""/>
@@ -53,10 +63,19 @@
 				<img id="card6"  class="card" src=" " alt=""/>
 			</div>
 
-			<button id="sortButton" >Sort Hand</u></button>
-			<button id="callButton"> CALL </u></button>
+			<div id="handButtons">
+				<button id="sortButton" >Sort Hand</button>
+				<button id="callButton"> CALL </button>
+			</div>
 		
-			
+			<div id="UI_CALLED_CARD">
+				<span style = "display: block; font-weight: bolder; font-family: Assistant; color:white; margin-top: 3%;">
+					CALLED CARD
+				</span>
+				<img id="TheCalledCard" class="card" style="margin-top: 10%;justify-content: center;"src=" " alt=""/>
+				
+			</div>
+
 		
 	</body>
 </html>

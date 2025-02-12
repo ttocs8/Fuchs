@@ -29,7 +29,8 @@ CARDINFOMAP.set("schelle_Zehner", [22,10,false]);
 CARDINFOMAP.set("schelle_Koenig", [23,4,false]);
 CARDINFOMAP.set("schelle_Ober", [24,3,false]);
 
-const RanksArray = ["Ass","Zehner","Koenig","Ober","Bauer","Neuner","Achter"];
+//const RanksArray = ["Ass","Zehner","Koenig","Ober","Bauer","Neuner","Achter"];
+const RanksArray = ["Ober","Bauer","Ass","Koenig","Zehner","Neuner","Achter"];
 
 class Card
 {
@@ -95,12 +96,12 @@ function Hand()
 		this.cards.push(card);
 	}
 }
-
+var theCalledCard = "undefined";
 function toggleCallButton(theHand) {
 	$(".callCardSuit").hide();
 	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
-	if (!hasGrosseFuchs){
+	if (!hasGrosseFuchs && theCalledCard !== "undefined"){
 		$("#callButton").hide();
 		$(".callCardSuit").hide();
 	}
@@ -124,8 +125,9 @@ $(document).ready(function(){
 	/////STICH
 	var stich = new Hand();
 	
-	//Show call button if you have grosse fuchs
-	toggleCallButton(playerHand);
+	if(theCalledCard !=="undefined")
+		toggleCallButton(playerHand);
+
 	$("#UI_CALL_CARD_container").hide();
 
 	$(".card").draggable({
@@ -178,7 +180,7 @@ $(document).ready(function(){
 	var callButtonToggle = false;
 	var calledCardSuit = "undefined";
 	var calledCardRank = "undefined";
-	var theCalledCard = null;
+	
 
 	$("#callButton").click(function(){	
 		calledCardSuit = "undefined";
@@ -190,8 +192,6 @@ $(document).ready(function(){
 				$("#UI_CALL_CARD_container").show();
 				$("#UI_CALL_CARD_menu").show();
 				$(".callCardSuit").show();
-		
-
 		}
 		else {
 				callButtonToggle = false;
@@ -201,7 +201,6 @@ $(document).ready(function(){
 	});
 
 	$(".callCardSuit").click(function(){	
-		
 			var cardSrc = $(this).attr('src');
 			var suit = cardSrc.substring(cardSrc.indexOf("_")+1, cardSrc.length-4);
 			if(suit.includes("selected"))
@@ -220,32 +219,53 @@ $(document).ready(function(){
 						$(element).attr('src',"images/call_" + tempsuit2 + ".png");
 					}
 				});
+
+				switch(suit) {
+					case "eichel":
+						$("#callrank" + RanksArray.length).hide();
+						var dir = "images/cards/eichel/";
+						for(i = 0; i < RanksArray.length - 1; i++){
+							$("#callrank" + (i + 1)).show();
+							$("#callrank" + (i + 1)).attr('src', dir + RanksArray[i] + ".png");
+						}
+					  break;
+					case "grune":
+						$("#callrank" + RanksArray.length).hide();
+						var dir = "images/cards/grune/";
+						for(i = 0; i < RanksArray.length - 1; i++){
+							$("#callrank" + (i + 1)).show();
+							$("#callrank" + (i + 1)).attr('src', dir + RanksArray[i] + ".png");
+						}
+					  break;
+					case "rote":
+						var dir = "images/cards/rote/";
+						for(i = 0; i < RanksArray.length; i++){
+							$("#callrank" + (i + 1)).show();
+							$("#callrank" + (i + 1)).attr('src', dir + RanksArray[i] + ".png");
+						}
+					  break;
+					case "schelle":
+						var dir = "images/cards/schelle/";
+						$("#callrank" + RanksArray.length).hide();
+						for(i = 0; i < RanksArray.length - 1; i++){
+							
+							$("#callrank" + (i + 1)).show();
+							$("#callrank" + (i + 1)).attr('src', dir + RanksArray[i] + ".png");
+						}
+					  break;
+					default:
+					  // code block
+				  }
 			}else
 			{
+				console.log("CLEAR CARDS");
 				$(this).attr('src', "images/call_" + suit + ".png");
+				for(i = 0; i < RanksArray.length; i++){
+					$("#callrank" + (i + 1)).hide();
+				}
 			}
 
-			switch(suit) {
-				case "eichel":
-					//change to select image
-					var dir = "images\\cards\\eichel\\";
-					for(i = 0; i < RanksArray.length-1; i++){
-						$(".callCardRanks").attr('src', dir + RanksArray[i] + ".png");
-					}
-					
-				  break;
-				case "grune":
-				  // code block
-				  break;
-				case "rote":
-				  // code block
-				  break;
-				case "schelle":
-				  // code block
-				  break;
-				default:
-				  // code block
-			  }
+			
 	
 			
 			//var calledCardDir = "images/card"
@@ -255,5 +275,20 @@ $(document).ready(function(){
 	$("#CLOSE").click(function(){
 		$("#UI_CALL_CARD_container").hide();
 		callButtonToggle = false;
+		for(i = 0; i < RanksArray.length; i++){
+			$("#callrank" + (i + 1)).hide();
+		}
+	});
+
+	$(".callCardRanks").click(function(){
+		var cardSrc = $(this).attr('src');
+		$("#TheCalledCard").attr('src', cardSrc);
+		theCalledCard = cardSrc.substring(cardSrc.split("/", 2).join("/").length+1,cardSrc.length-4).replace("/","_");
+		$("#callButton").hide();
+		$("#UI_CALL_CARD_container").hide();
+		callButtonToggle = false;
+		for(i = 0; i < RanksArray.length; i++){
+			$("#callrank" + (i + 1)).hide();
+		}
 	});
 });
