@@ -138,9 +138,10 @@ $(document).ready(function(){
 	$("#stich").droppable({
 		accept: '.card',
 		drop: function(event, ui) {
-			ui.draggable.draggable({disabled: true});
-
+			
 			if(theCalledCard.includes("_")){
+				ui.draggable.draggable({disabled: true});
+
 				//add card to stich
 				$(this).append($(ui.draggable));
 				var cardToProcess = $(ui.draggable).attr('src');
@@ -181,14 +182,10 @@ $(document).ready(function(){
 	});
 
 	var callButtonToggle = false;
-	var calledCardSuit = "undefined";
-	var calledCardRank = "undefined";
-	
 
 	$("#callButton").click(function(){	
-		calledCardSuit = "undefined";
-		calledCardRank = "undefined";
-		theCalledCard = null;
+		
+		theCalledCard = "undefined";
 	
 		if(!callButtonToggle){
 				callButtonToggle = true;
