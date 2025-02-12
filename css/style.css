@@ -35,10 +35,10 @@ body	{background-image: url("../images/bg.png");
 #UI_CALLED_CARD {
 	justify-content: center;
 	float:right;
-	border: 2px solid #00eeff; 
+	/* border: 2px solid #00eeff;  */
 	margin-right: 2%;
 	margin-top: 2%;
-	height: 40vh;
+	height: 25vh;
 	width: 25vw;
 
 }
@@ -88,20 +88,21 @@ body	{background-image: url("../images/bg.png");
 	margin-top: 2%;
 	height: 40vh;
 	width: 95vw;
-	display: flex;
 	justify-content: center;
-	flex: 3 3 auto;
 	padding-top: 5%;
 }
 
 .card {
-	display: left;
 	max-width:15vw;
 	max-height:24vh;
 	padding:0.25%;
 	width: auto;
 	height: auto;
 	/* border: 2px solid #ff0000; */
+}
+
+#stich > .card {
+	padding-left: 2.5%;
 }
 
 #sortButton {
