@@ -101,14 +101,16 @@ function toggleCallButton(theHand) {
 	$(".callCardSuit").hide();
 	var hasGrosseFuchs = theHand.cards.some(elem => elem.order === 1);
 
-	if (!hasGrosseFuchs && theCalledCard !== "undefined"){
+	if (!hasGrosseFuchs){
 		$("#callButton").hide();
 		$(".callCardSuit").hide();
 	}
 	else {
 		$("#callButton").show();
-		
 	}
+
+	if(theCalledCard.includes("_"))
+		$("#callButton").hide();
 }
 
 $(document).ready(function(){
@@ -125,8 +127,7 @@ $(document).ready(function(){
 	/////STICH
 	var stich = new Hand();
 	
-	if(theCalledCard !=="undefined")
-		toggleCallButton(playerHand);
+	toggleCallButton(playerHand);
 
 	$("#UI_CALL_CARD_container").hide();
 
