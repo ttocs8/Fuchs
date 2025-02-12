@@ -140,17 +140,19 @@ $(document).ready(function(){
 		drop: function(event, ui) {
 			ui.draggable.draggable({disabled: true});
 
-			//add card to stich
-			$(this).append($(ui.draggable));
-			var cardToProcess = $(ui.draggable).attr('src');
+			if(theCalledCard.includes("_")){
+				//add card to stich
+				$(this).append($(ui.draggable));
+				var cardToProcess = $(ui.draggable).attr('src');
 
-			var card = playerHand.cards.find(x => x.imgsrc === cardToProcess);
-			stich.add(card);
+				var card = playerHand.cards.find(x => x.imgsrc === cardToProcess);
+				stich.add(card);
 
-			//remove card from players Hand
-			playerHand.cards = playerHand.cards.filter(e => e.order !== card.order)
+				//remove card from players Hand
+				playerHand.cards = playerHand.cards.filter(e => e.order !== card.order)
 
-			toggleCallButton(playerHand);
+				toggleCallButton(playerHand);
+			}
 		}
 	});
 
