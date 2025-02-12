@@ -31,6 +31,8 @@ CARDINFOMAP.set("schelle_Ober", [24,3,false]);
 
 //const RanksArray = ["Ass","Zehner","Koenig","Ober","Bauer","Neuner","Achter"];
 const RanksArray = ["Ober","Bauer","Ass","Koenig","Zehner","Neuner","Achter"];
+const SuitsArray = ["eichel","grune","rote","schelle"];
+
 
 class Card
 {
@@ -113,24 +115,239 @@ function toggleCallButton(theHand) {
 		$("#callButton").hide();
 }
 
+function GAME()
+{
+	//can be 1, 2, 3, or 4 where 1 is the User and the rest are bots
+	this.DEALER = 0;
+
+	this.CALLER = 0;
+
+	//can be 1, 2, 3, or 4 where 1 is the User and the rest are bots
+	this.CURRENT_PLAYER_OUT = 0;
+
+	this.shiftDealer = function(){
+		if(this.DEALER < 4){
+			this.DEALER++;
+		}
+		else
+			this.DEALER = 1;
+
+		if(this.DEALER > 3)
+			this.CURRENT_PLAYER_OUT = 1;
+		else
+			this.CURRENT_PLAYER_OUT = this.DEALER + 1;
+	}
+
+	this.ChooseRandomDealer = function(){
+		this.DEALER = Math.floor(Math.random() * (5  - 1 + 1)) + 1;
+
+		if(this.DEALER > 3)
+			this.CURRENT_PLAYER_OUT = 1;
+		else
+			this.CURRENT_PLAYER_OUT = this.DEALER + 1;
+	}
+
+	this.FindCaller = function(playerhand, bot1hand, bot2hand, bot3hand) {
+		if(playerhand.cards.some(elem => elem.order === 1))
+			this.CALLER = 1;
+		else if(bot1hand.cards.some(elem => elem.order === 1))
+			this.CALLER = 2;
+		else if(bot2hand.cards.some(elem => elem.order === 1))
+			this.CALLER = 3;
+		else if(bot3hand.cards.some(elem => elem.order === 1))
+			this.CALLER = 4;
+	}
+}
+
+var TheGame = new GAME();
+TheGame.ChooseRandomDealer();
+//TheGame.shiftDealerAndFirstOut();
+
+
+/////DECK
+var deck = new Deck();
+deck.shuffle();
+//console.log(deck.getNumCards());
+
+/////PLAYER HANDS
+var playerHand = new Hand();
+playerHand.deal(deck);
+
+var bot1Hand = new Hand();
+bot1Hand.deal(deck)
+console.log(bot1Hand.cards);
+
+var bot2Hand = new Hand();
+bot2Hand.deal(deck)
+console.log(bot2Hand.cards);
+
+var bot3Hand = new Hand();
+bot3Hand.deal(deck)
+console.log(bot3Hand.cards);
+
+console.log(deck.getNumCards());
+
+/////STICH
+var stich = new Hand();
+
+TheGame.FindCaller(playerHand, bot1Hand, bot2Hand, bot3Hand);
+
+
 $(document).ready(function(){
-	/////DECK
-	var deck = new Deck();
-	deck.shuffle();
-	//console.log(deck.getNumCards());
-
-	/////PLAYER HANDS
-	var playerHand = new Hand();
-	playerHand.deal(deck);
-	//console.log(deck.getNumCards());
-
-	/////STICH
-	var stich = new Hand();
 	
-	toggleCallButton(playerHand);
+	//BOT CALLING 
+	switch(TheGame.CALLER) {
+		case 2:
+			setTimeout(function(){
+				var cardSuitDecision = bot1Hand.cards.find(elem => elem.isTrump === false)
+				var cardToCall = "*";
+				while(cardToCall.includes("*") || (cardToCall.includes(cardSuitDecision.suit) || cardToCall.includes(cardSuitDecision.rank))) {
+					var inx = Math.floor(Math.random() * ((CARDINFOMAP.size - 1)  - 12 + 1)) + 12;
+					cardToCall = Array.from(CARDINFOMAP.keys())[inx];  
+				}
+	
+				var suit = cardToCall.substring(0,cardToCall.lastIndexOf("_"));
+				var rank = cardToCall.substring(cardToCall.lastIndexOf("_") + 1,cardToCall.length);
+				var imgsrc = "images/cards/" + suit + "/" + rank + ".png";
+	
+						
+				$("#TheCalledCard").attr('src', imgsrc)
+				theCalledCard = imgsrc.substring(imgsrc.split("/", 2).join("/").length+1,imgsrc.length-4).replace("/","_");
+
+				$("#CALLED_CARD_TEXT").text("PLAYER 2 CALLED CARD");
+	
+			},5000); 
+			
+			break;
+		case 3:
+			setTimeout(function(){
+				var cardSuitDecision = bot2Hand.cards.find(elem => elem.isTrump === false)
+				var cardToCall = "*";
+				while(cardToCall.includes("*") || (cardToCall.includes(cardSuitDecision.suit) || cardToCall.includes(cardSuitDecision.rank))) {
+					var inx = Math.floor(Math.random() * ((CARDINFOMAP.size - 1)  - 12 + 1)) + 12;
+					cardToCall = Array.from(CARDINFOMAP.keys())[inx];  
+				}
+	
+				var suit = cardToCall.substring(0,cardToCall.lastIndexOf("_"));
+				var rank = cardToCall.substring(cardToCall.lastIndexOf("_") + 1,cardToCall.length);
+				var imgsrc = "images/cards/" + suit + "/" + rank + ".png";
+	
+						
+				$("#TheCalledCard").attr('src', imgsrc)
+				theCalledCard = imgsrc.substring(imgsrc.split("/", 2).join("/").length+1,imgsrc.length-4).replace("/","_");
+
+				$("#CALLED_CARD_TEXT").text("PLAYER 3 CALLED CARD");
+	
+			},5000); 
+			
+			break;
+		case 4:
+			setTimeout(function(){
+				var cardSuitDecision = bot3Hand.cards.find(elem => elem.isTrump === false)
+				var cdsuit = cardSuitDecision.suit;
+				var cardToCall = "*";
+				while(cardToCall.includes("*") || (cardToCall.includes(cdsuit) || cardToCall.includes(cardSuitDecision.rank))) {
+					var inx = Math.floor(Math.random() * ((CARDINFOMAP.size - 1) - 12 + 1)) + 12;
+					cardToCall = Array.from(CARDINFOMAP.keys())[inx];  
+				}
+	
+				var suit = cardToCall.substring(0,cardToCall.lastIndexOf("_"));
+				var rank = cardToCall.substring(cardToCall.lastIndexOf("_") + 1,cardToCall.length);
+				var imgsrc = "images/cards/" + suit + "/" + rank + ".png";
+	
+						
+				$("#TheCalledCard").attr('src', imgsrc)
+				theCalledCard = imgsrc.substring(imgsrc.split("/", 2).join("/").length+1,imgsrc.length-4).replace("/","_");
+
+				$("#CALLED_CARD_TEXT").text("PLAYER 4 CALLED CARD");
+		
+			},5000); 
+			
+
+			break;
+		default:
+			break;
+	}
+
+	//BOT PLAY
+	switch(TheGame.CURRENT_PLAYER_OUT) {
+		case 2:
+			setTimeout(function(){
+				//if hand contains the latest stich card - play that one
+				var cardToPlay = stich.cards[stich.cards.length-1];
+
+				if(!typeof cardToPlay === 'undefined'){
+					var cardToPlay = bot1Hand.cards.find(x => x.suit === cardToFind.suit);
+					stich.add(cardToPlay);
+				}
+				else{
+					var cardIndxToPick = Math.floor(Math.random() * 5);
+
+					//add to stich
+					stich.add(bot1Hand.cards[cardIndxToPick]);
+					$("#stich").append("<img id=\"bot1card\"  class=\"botcard\" src=" + bot1Hand.cards[cardIndxToPick].imgsrc + " />")
+					$("#bot1card").hide().animate({left:5000, opacity:"show"}, 1500);
+					bot1Hand.cards.splice(cardIndxToPick, 1);
+				}
+			},6500); 
+			
+			
+			break;
+		case 3:
+			setTimeout(function(){
+				//if hand contains the latest stich card - play that one
+				var cardToPlay = stich.cards[stich.cards.length-1];
+
+				if(!typeof cardToPlay === 'undefined'){
+					var cardToPlay = bot2Hand.cards.find(x => x.suit === cardToFind.suit);
+					stich.add(cardToPlay);
+				}
+				else{
+					var cardIndxToPick = Math.floor(Math.random() * 5);
+
+					//add to stich
+					stich.add(bot2Hand.cards[cardIndxToPick]);
+					$("#stich").append("<img id=\"bot2card\"  class=\"botcard\" src=" + bot2Hand.cards[cardIndxToPick].imgsrc + " />")
+					$("#bot2card").hide().animate({left:5000, opacity:"show"}, 1500);
+
+					bot2Hand.cards.splice(cardIndxToPick, 1);
+				}
+			},6500); 
+
+			break;
+		case 4:
+			setTimeout(function(){
+				//if hand contains the latest stich card - play that one
+				var cardToPlay = stich.cards[stich.cards.length-1];
+
+				if(!typeof cardToPlay === 'undefined'){
+					var cardToPlay = bot3Hand.cards.find(x => x.suit === cardToFind.suit);
+					stich.add(cardToPlay);
+				}
+				else{
+					var cardIndxToPick = Math.floor(Math.random() * 5);
+
+					//add to stich
+					stich.add(bot3Hand.cards[cardIndxToPick]);
+					$("#stich").append("<img id=\"bot3card\"  class=\"botcard\" src=" + bot3Hand.cards[cardIndxToPick].imgsrc + " />")
+					$("#bot3card").hide().animate({left:5000, opacity:"show"}, 1500);
+
+					bot3Hand.cards.splice(cardIndxToPick, 1);
+				}
+			},6500); 
+
+			break;
+		default:
+			break;
+	}
+	
+
+
 
 	$("#UI_CALL_CARD_container").hide();
 
+	toggleCallButton(playerHand);
+	
 	$(".card").draggable({
 		revert: true
 	});
@@ -139,7 +356,7 @@ $(document).ready(function(){
 		accept: '.card',
 		drop: function(event, ui) {
 			
-			if(theCalledCard.includes("_")){
+			if(theCalledCard.includes("_") && TheGame.CURRENT_PLAYER_OUT == 1){
 				ui.draggable.draggable({disabled: true});
 
 				//add card to stich
@@ -282,6 +499,7 @@ $(document).ready(function(){
 
 	$(".callCardRanks").click(function(){
 		var cardSrc = $(this).attr('src');
+		$("#CALLED_CARD_TEXT").text("YOU CALLED CARD");
 		$("#TheCalledCard").attr('src', cardSrc);
 		theCalledCard = cardSrc.substring(cardSrc.split("/", 2).join("/").length+1,cardSrc.length-4).replace("/","_");
 		$("#callButton").hide();

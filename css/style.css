@@ -44,6 +44,17 @@ body	{background-image: url("../images/bg.png");
 }
 
 
+.UI_CALLED_CARD {
+	max-width:15vw;
+	max-height:24vh;
+	padding:0.25%;
+	width: auto;
+	height: auto;
+	/* border: 2px solid #ff0000; */
+}
+
+
+
 #handButtons {
 	float:left;
 	justify-content: center;
@@ -101,9 +112,19 @@ body	{background-image: url("../images/bg.png");
 	/* border: 2px solid #ff0000; */
 }
 
+.botcard {
+	max-width:15vw;
+	max-height:24vh;
+	padding:0.25%;
+	width: auto;
+	height: auto;
+	/* border: 2px solid #ff0000; */
+}
+
 #stich > .card {
 	padding-left: 2.5%;
 }
+
 
 #sortButton {
 	
@@ -166,6 +187,8 @@ body	{background-image: url("../images/bg.png");
 	max-height:100vh;
 	width: auto;
 	height: auto;
+	padding-left:2%;
+	padding-right:1%;
 	/* border: 2px solid #ff0000; */
 }
 
