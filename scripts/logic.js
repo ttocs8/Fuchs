@@ -258,6 +258,43 @@ function BotCall(stich, bot1Hand, bot2Hand, bot3Hand) {
 function BotPlay(stich, bot1Hand, bot2Hand, bot3Hand) {
 	if(playOrderCheck(TheGame.PLAY_ORDER)) {
 		console.log("STICH OVER - EVERYONE WENT");
+
+		//decide winner of stich
+		stich.cards.sort(function(a, b) {
+			return a.order - b.order;
+		});
+
+		var winnerSrc = stich.cards[0].imgsrc; 
+
+		var stichHTMLElems = $("#stich").children().toArray();
+		var winnerElem = stichHTMLElems.find(element => element.src.includes(winnerSrc));
+		var winner = "N/A";
+
+		if(winnerElem.id.includes("bot1"))
+			winner = "Player 2 Wins the Stich";
+		else if(winnerElem.id.includes("bot2"))
+			winner = "Player 3 Wins the Stich";
+		else if(winnerElem.id.includes("bot3"))
+			winner = "Player 4 Wins the Stich";
+		else if(winnerElem.id.includes("card") && !winnerElem.id.includes("bot"))
+			winner = "You Won the Stich!";
+		
+		
+		//$("#stich").text(winner);Assistant
+		//$("#stich").css({"font-weight":"bold", "color":"white",  "font-family": "Assistant"}).text(winner);
+		$("#NextRound").click(function(){	
+			
+			$("#stich").children().remove();
+			$("#stich").css({"font-weight":"bold", "color":"white",  "font-family": "Assistant"}).text(winner);
+		
+		});
+		TheGame.PLAY_ORDER.forEach(element => {
+			element = false;
+		});
+
+		
+		//$("#stich").children().remove().delay(5000);
+		
 		return;
 	}
 	if(TheGame.CURRENTSTATE.includes("TURNS")){
@@ -552,6 +589,42 @@ $(document).ready(function(){
 		drop: function(event, ui) {
 			if(playOrderCheck(TheGame.PLAY_ORDER)){
 				console.log("STICH OVER - EVERYONE WENT");
+
+				//decide winner of stich
+				stich.cards.sort(function(a, b) {
+					return a.order - b.order;
+				});
+
+				var winnerSrc = stich.cards[0].imgsrc; 
+
+				var stichHTMLElems = $("#stich").children().toArray();
+				var winnerElem = stichHTMLElems.find(element => element.src.includes(winnerSrc));
+				var winner = "N/A";
+
+				if(winnerElem.id.includes("bot1"))
+					winner = "Player 2 Wins the Stich";
+				else if(winnerElem.id.includes("bot2"))
+					winner = "Player 3 Wins the Stich";
+				else if(winnerElem.id.includes("bot3"))
+					winner = "Player 4 Wins the Stich";
+				else if(winnerElem.id.includes("card") && !winnerElem.id.includes("bot"))
+					winner = "You Won the Stich!";
+				
+				
+				//$("#stich").text(winner);Assistant
+				//$("#stich").css({"font-weight":"bold", "color":"white",  "font-family": ""}).text(winner);
+				$("#NextRound").click(function(){	
+			
+					$("#stich").children().remove();
+					$("#stich").css({"font-weight":"bold", "color":"white",  "font-family": "Assistant"}).text(winner);
+				
+				});
+				
+				TheGame.PLAY_ORDER.forEach(element => {
+					element = false;
+				});
+				
+				//$("#stich").children().remove().delay(5000);
 				return;
 			}
 			if(TheGame.CURRENTSTATE.includes("TURNS") && theCalledCard.includes("_") && TheGame.CURRENT_PLAYER_OUT == 1){
