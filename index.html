@@ -6,6 +6,11 @@
     <title>Fuchs Card Game</title>
     <style>
         body {
+            /* background-image: url("images/bg.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            background-size: cover;	 */
             font-family: Arial, sans-serif;
             background-color: green;
             display: flex;
@@ -25,6 +30,9 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+
         }
         .player-area {
             position: absolute;
@@ -53,12 +61,52 @@
             height: 75%;
             margin: auto;
         }
-        
+
+        #continue-stich {
+            top: 85vh;
+            left: 20vw;
+            position: absolute;
+            
+        }
+        @media (pointer:none), (pointer:coarse), (screen) and (max-device-width: 640px) {
+            #continue-stich {
+                top: 95vh;
+                left: 23vw;
+                position: absolute;
+            
+            }
+            
+            #contiue-stich-button {
+                /* top:260px;
+                left:585px; */
+                background-color:rgb(255, 255, 255);
+                border: none;
+                color: black;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 8px;
+                border: 2px solid #4CAF50;
+                -webkit-transition-duration: 0.4s; 
+                transition-duration: 0.4s;
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
         #player-hand {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 20px;
+        }
+
+        #player-stiche {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
         }
         
         .player-card {
@@ -72,10 +120,57 @@
             justify-content: center;
             font-size: min(4vw, 20px);
         }
+
+        .stiche-card {
+            width: min(12vw, 60px);
+            height: min(18vh, 90px);
+            background-color: white;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: min(4vw, 20px);
+            opacity: 0;
+        }
+
+        #winner-text{
+            text-align: center;
+            color: antiquewhite;
+        }
+       
+        #contiue-stich-button {
+            /* top:260px;
+            left:585px; */
+            background-color:rgb(255, 255, 255);
+            border: none;
+            color: black;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #4CAF50;
+            -webkit-transition-duration: 0.4s; 
+            transition-duration: 0.4s;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #contiue-stich-button:hover {
+            background-color: #4CAF50; /* Green */
+            border: 2px solid #2a612c;
+            color: rgb(60, 37, 37);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>Fuchs Card Game</h1>
+    <h1>Fuchs!</h1>
+    <h2 id="winner-text"></h2>
+    <div id="continue-stich">
+        <button id="contiue-stich-button" onclick="determineWinner()">CHECK STICH WINNER</button>
+    </div>
     <div id="game-board">
         <div class="player-area" id="player-3">Bot 2</div>
         <div class="player-area" id="player-2">Bot 1</div>
@@ -84,101 +179,9 @@
         <div id="stich"></div>
     </div>
     <div id="player-hand"></div>
-    <script>
-        const players = ['Player', 'Bot 1', 'Bot 2', 'Bot 3'];
-        let currentPlayerIndex = 0;
-        
-        const suits = ['♠', '♥', '♦', '♣'];
-        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-        let deck = [];
-        let playerHand = [];
-
-        function createDeck() {
-            deck = [];
-            for (let suit of suits) {
-                for (let value of values) {
-                    deck.push(`${value}${suit}`);
-                }
-            }
-            shuffleDeck();
-        }
-
-        function shuffleDeck() {
-            for (let i = deck.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [deck[i], deck[j]] = [deck[j], deck[i]];
-            }
-        }
-        
-        function dealCards() {
-            playerHand = deck.splice(0, 6);
-            displayPlayerHand();
-        }
-        
-        function displayPlayerHand() {
-            const handContainer = document.getElementById('player-hand');
-            handContainer.innerHTML = '';
-            playerHand.forEach((card, index) => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('player-card');
-                cardDiv.textContent = card;
-                cardDiv.addEventListener('click', () => playPlayerCard(index));
-                handContainer.appendChild(cardDiv);
-            });
-        }
-        
-        function playPlayerCard(cardIndex) {
-            const card = playerHand.splice(cardIndex, 1)[0];
-            displayPlayerHand();
-            playCard(0, card);
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            setTimeout(botTurns, 1000);
-        }
-        
-        function botTurns() {
-            if (currentPlayerIndex !== 0 && deck.length > 0) {
-                setTimeout(() => {
-                    playCard(currentPlayerIndex, deck.pop());
-                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-                    if (currentPlayerIndex === 0) {
-                        setTimeout(() => {}, 1000);
-                    } else {
-                        botTurns();
-                    }
-                }, 1000);
-            }
-        }
-        
-        function playCard(playerIndex, cardValue) {
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.textContent = cardValue;
-            document.getElementById('stich').appendChild(card);
-            
-            let board = document.getElementById('game-board');
-            let startX = 0, startY = 0;
-            let centerX = board.clientWidth / 2 - card.clientWidth / 2;
-            let centerY = board.clientHeight / 2 - card.clientHeight / 2;
-            let offset = Math.min(board.clientWidth, board.clientHeight) * 0.12;
-            
-            switch (playerIndex) {
-                case 0: startX = centerX; startY = board.clientHeight - card.clientHeight - 10; centerY += offset; break;
-                case 1: startX = 10; startY = centerY; centerX -= offset; break;
-                case 2: startX = centerX; startY = 10; centerY -= offset; break;
-                case 3: startX = board.clientWidth - card.clientWidth - 10; startY = centerY; centerX += offset; break;
-            }
-            
-            card.style.left = `${startX}px`;
-            card.style.top = `${startY}px`;
-            
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = `translate(${centerX - startX}px, ${centerY - startY}px)`;
-            }, 50);
-        }
-        
-        createDeck();
-        dealCards();
-    </script>
+    <div id="player-stiche"></div>
+    
+    <script src="scripts/indexnew.js"></script>
+   
 </body>
 </html>
