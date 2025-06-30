@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuchs Card Game</title>
+    <style>
+        body {
+            /* background-image: url("images/bg.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            background-size: cover;	 */
+            font-family: Arial, sans-serif;
+            background-color: green;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #game-board {
+            position: relative;
+            width: min(90vw, 600px);
+            height: min(60vh, 400px);
+            border: 2px solid white;
+            background-color: darkgreen;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+        .player-area {
+            position: absolute;
+        }
+        #player-1 { bottom: 0; left: 50%; transform: translateX(-50%); }
+        #player-2 { left: 0; top: 50%; transform: translateY(-50%); }
+        #player-3 { top: 0; left: 50%; transform: translateX(-50%); }
+        #player-4 { right: 0; top: 50%; transform: translateY(-50%); }
+        
+        .card {
+            width: min(12vw, 60px);
+            height: min(18vh, 90px);
+            background-color: white;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: min(4vw, 20px);
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        
+        #stich {
+            width: 75%;
+            height: 75%;
+            margin: auto;
+        }
+
+        #continue-stich {
+            top: 85vh;
+            left: 20vw;
+            position: absolute;
+            
+        }
+        @media (pointer:none), (pointer:coarse), (screen) and (max-device-width: 640px) {
+            #continue-stich {
+                top: 95vh;
+                left: 23vw;
+                position: absolute;
+            
+            }
+            
+            #contiue-stich-button {
+                /* top:260px;
+                left:585px; */
+                background-color:rgb(255, 255, 255);
+                border: none;
+                color: black;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 8px;
+                border: 2px solid #4CAF50;
+                -webkit-transition-duration: 0.4s; 
+                transition-duration: 0.4s;
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
+        #player-hand {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #player-stiche {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .player-card {
+            cursor: pointer;
+            width: min(12vw, 60px);
+            height: min(18vh, 90px);
+            background-color: white;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: min(4vw, 20px);
+        }
+
+        .stiche-card {
+            width: min(12vw, 60px);
+            height: min(18vh, 90px);
+            background-color: white;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: min(4vw, 20px);
+            opacity: 0;
+        }
+
+        #winner-text{
+            text-align: center;
+            color: antiquewhite;
+        }
+       
+        #contiue-stich-button {
+            /* top:260px;
+            left:585px; */
+            background-color:rgb(255, 255, 255);
+            border: none;
+            color: black;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #4CAF50;
+            -webkit-transition-duration: 0.4s; 
+            transition-duration: 0.4s;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #contiue-stich-button:hover {
+            background-color: #4CAF50; /* Green */
+            border: 2px solid #2a612c;
+            color: rgb(60, 37, 37);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fuchs!</h1>
+    <h2 id="winner-text"></h2>
+    <div id="continue-stich">
+        <button id="contiue-stich-button" onclick="determineWinner()">CHECK STICH WINNER</button>
+    </div>
+    <div id="game-board">
+        <div class="player-area" id="player-3">Bot 2</div>
+        <div class="player-area" id="player-2">Bot 1</div>
+        <div class="player-area" id="player-4">Bot 3</div>
+        <div class="player-area" id="player-1">Player (You)</div>
+        <div id="stich"></div>
+    </div>
+    <div id="player-hand"></div>
+    <div id="player-stiche"></div>
+    
+    <script src="scripts/indexnew.js"></script>
+   
+</body>
+</html>

@@ -1,0 +1,257 @@
+body {
+    font-family: Geneva, sans-serif;
+    background-color: #0b5e2e;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+#game {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1,
+h2,
+h3 {
+    text-align: center;
+}
+
+.player {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+#log {
+    max-width: 12.5vw;
+    max-height: 80vh;
+    font-family: Geneva, sans-serif;
+    margin: auto;
+    overflow-y: auto;
+    border: 1px solid #444;
+    padding: 5px;
+    background: #111;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    background: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #666;
+}
+#sortButton {
+	
+	justify-content: center;
+	margin-top: 10%;
+	max-width: fit-content;
+    background-color: rgb(222, 224, 223); 
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+	border-radius: 8px;
+	border: 2px solid #3ca1ff;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+	font-weight: bold;
+}
+
+#sortButton:hover {
+    background-color: #2194ff;
+	border: 2px solid #00152e;
+    color: rgb(0, 0, 0);
+	font-weight: bold;
+}
+
+.player-zone {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+}
+
+.card {
+    width: 100px;
+    height: 150px;
+    margin: 8px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card.hidden {
+    background-color: #ccc;
+    background-image: url('../images/back.png');
+    /* Optional card back image */
+    background-size: cover;
+    cursor: default;
+    object-fit: cover;
+
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.trick-area {
+    background-image: url('../images/tablebg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    max-width: 30vw;
+    min-height: 200px;
+    /* background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px; */
+    padding: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.status {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.scoreboard {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 70px;
+        height: 100px;
+    }
+
+    .player-zone {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+#log-container {
+    float: left;
+    left: 2vw;
+    position: relative;
+
+}
+
+#table-container {
+    position: relative;
+    float: right;
+    top: 2vh;
+    max-width: 90vw;
+}
+
+#table {
+
+    width: 70vw;
+    height: 80vh;
+    display: grid;
+    grid-template-areas:
+        "top    top    top"
+        "left   center right"
+        "bottom bottom bottom";
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr;
+}
+
+.player {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.top {
+    grid-area: top;
+    position: relative;
+}
+
+.bottom {
+    grid-area: bottom;
+}
+
+.center {
+    grid-area: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 60%;
+}
+
+.trick-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 160px;
+    min-width: 160px;
+
+}
+
+.left .card img,
+.right .card img {
+    transform: rotate(180deg);
+}
+
+.top .card img {
+    transform: rotate(180deg);
+}
+
+.name-label-top {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.name-label-side {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#dealer {
+    color: rgb(255, 91, 91);
+}
