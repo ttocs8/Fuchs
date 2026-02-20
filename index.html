@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="images/favicon.png" type="image/png" sizes="128x128">
     <title>Fuchs Card Game</title>
     <style>
         body { font-family: Arial, sans-serif; background: #228B22; color: white; text-align: center; margin: 0; }
@@ -35,8 +36,7 @@
         }
         .card img { width: 100%; height: 100%; object-fit: cover; }
         .card-back { 
-            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80') no-repeat center/cover; 
-            /* Replace above URL with your own card back image, e.g. 'images/card_back.png' */
+            background: url('images/back.png') no-repeat center/cover; 
         }
         .player-label { 
             font-size: 18px; 
@@ -182,47 +182,43 @@
     </div>
 
     <script>
-        // -----------------------------
-        // FUCHS GAME LOGIC (core unchanged, only UI modified)
-        // -----------------------------
-
         const suits = ['eichel', 'grun', 'rot', 'schelle'];
-        const ranks = ['ober', 'bauer', 'ass', 'zehner', 'koenig', 'neuner', 'achter'];
+        const ranks = ['Ober', 'Bauer', 'ass', 'Zehner', 'Koenig', 'Neuner', 'Achter'];
 
         const deckTemplate = [
             // ────────────────────────────────────────────────
             // Trump hierarchy order (strongest → weakest)
             // ────────────────────────────────────────────────
-            { id: 0,  suit: 'eichel', rank: 'ober',   points: 4,  trumpRank: 1  },  // 1. Grosse Fuchs (Eichel Queen)
-            { id: 1,  suit: 'grun',   rank: 'ober',   points: 3,  trumpRank: 2  },  // 2. Kleiner Fuchs / Jee (Grun Queen)
-            { id: 2,  suit: 'eichel', rank: 'bauer',  points: 2,  trumpRank: 3  },  // 3. Eichel Bauer
-            { id: 3,  suit: 'grun',   rank: 'bauer',  points: 2,  trumpRank: 4  },  // 4. Grun Bauer
-            { id: 4,  suit: 'rot',    rank: 'bauer',  points: 2,  trumpRank: 5  },  // 5. Rot Bauer
-            { id: 5,  suit: 'schelle',rank: 'bauer',  points: 2,  trumpRank: 6  },  // 6. Schelle Bauer
+            { id: 0,  suit: 'eichel', rank: 'Ober',   points: 4,  trumpRank: 1  },  // 1. Grosse Fuchs 
+            { id: 1,  suit: 'grun',   rank: 'Ober',   points: 3,  trumpRank: 2  },  // 2. Kleiner Fuchs 
+            { id: 2,  suit: 'eichel', rank: 'Bauer',  points: 2,  trumpRank: 3  },  // 3. Eichel Bauer
+            { id: 3,  suit: 'grun',   rank: 'Bauer',  points: 2,  trumpRank: 4  },  // 4. Grun Bauer
+            { id: 4,  suit: 'rot',    rank: 'Bauer',  points: 2,  trumpRank: 5  },  // 5. Rot Bauer
+            { id: 5,  suit: 'schelle',rank: 'Bauer',  points: 2,  trumpRank: 6  },  // 6. Schelle Bauer
             { id: 6,  suit: 'rot',    rank: 'ass',    points: 11, trumpRank: 7  },  // 7. Rot Ass
-            { id: 7,  suit: 'rot',    rank: 'zehner', points: 10, trumpRank: 8  },  // 8. Rot Zehner
-            { id: 8,  suit: 'rot',    rank: 'koenig', points: 4,  trumpRank: 9  },  // 9. Rot König
-            { id: 9,  suit: 'rot',    rank: 'ober',   points: 3,  trumpRank: 10 },  // 10. Rot Ober
-            { id: 10, suit: 'rot',    rank: 'neuner', points: 0,  trumpRank: 11 },  // 11. Rot Neiner
-            { id: 11, suit: 'rot',    rank: 'achter', points: 0,  trumpRank: 12 },  // 12. Rot Achter
+            { id: 7,  suit: 'rot',    rank: 'Zehner', points: 10, trumpRank: 8  },  // 8. Rot Zehner
+            { id: 8,  suit: 'rot',    rank: 'Koenig', points: 4,  trumpRank: 9  },  // 9. Rot König
+            { id: 9,  suit: 'rot',    rank: 'Ober',   points: 3,  trumpRank: 10 },  // 10. Rot Ober
+            { id: 10, suit: 'rot',    rank: 'Neuner', points: 0,  trumpRank: 11 },  // 11. Rot Neiner
+            { id: 11, suit: 'rot',    rank: 'Achter', points: 0,  trumpRank: 12 },  // 12. Rot Achter
 
             // ────────────────────────────────────────────────
-            // Non-trump cards (ordered roughly by suit strength / convention)
+            // Non-trump cards (ordered roughly by suit strength)
             // ────────────────────────────────────────────────
             { id: 12, suit: 'eichel', rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
-            { id: 13, suit: 'eichel', rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
-            { id: 14, suit: 'eichel', rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
-            { id: 15, suit: 'eichel', rank: 'neuner', points: 0,  trumpRank: null, rankOrder: 4 },
+            { id: 13, suit: 'eichel', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 14, suit: 'eichel', rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 15, suit: 'eichel', rank: 'Neuner', points: 0,  trumpRank: null, rankOrder: 4 },
 
             { id: 16, suit: 'grun',   rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
-            { id: 17, suit: 'grun',   rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
-            { id: 18, suit: 'grun',   rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
-            { id: 19, suit: 'grun',   rank: 'neuner', points: 0,  trumpRank: null, rankOrder: 4 },
+            { id: 17, suit: 'grun',   rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 18, suit: 'grun',   rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 19, suit: 'grun',   rank: 'Neuner', points: 0,  trumpRank: null, rankOrder: 4 },
 
             { id: 20, suit: 'schelle',rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
-            { id: 21, suit: 'schelle',rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
-            { id: 22, suit: 'schelle',rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
-            { id: 23, suit: 'schelle',rank: 'ober',   points: 3,  trumpRank: null, rankOrder: 4 }
+            { id: 21, suit: 'schelle',rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 22, suit: 'schelle',rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 23, suit: 'schelle',rank: 'Ober',   points: 3,  trumpRank: null, rankOrder: 4 }
         ];
 
         deckTemplate.forEach(card => {
@@ -252,7 +248,7 @@
             playedSuits: new Set()
         };
 
-        // Modal controls (same as before)
+        // Modal controls
         const modal = document.getElementById('popup-modal');
         const modalMessage = document.getElementById('popup-message');
         const closeBtn = document.querySelector('.close');
@@ -308,7 +304,7 @@
             const sa = suitOrder[a.suit] ?? 99;
             const sb = suitOrder[b.suit] ?? 99;
             if (sa !== sb) return sa - sb;
-            const rankOrder = {ass:0, zehner:1, koenig:2, ober:3, neuner:4, achter:5, bauer:6};
+            const rankOrder = {ass:0, Zehner:1, Koenig:2, Ober:3, Neuner:4, Achter:5, Bauer:6};
             return (rankOrder[a.rank] ?? 99) - (rankOrder[b.rank] ?? 99);
         };
 
@@ -318,7 +314,7 @@
                 gameState.players[i].hand = deck.splice(0, 6);
             }
             for (let p = 0; p < 4; p++) {
-                if (gameState.players[p].hand.some(c => c.suit === 'eichel' && c.rank === 'ober')) {
+                if (gameState.players[p].hand.some(c => c.suit === 'eichel' && c.rank === 'Ober')) {
                     gameState.currentPlayer = p;
                     break;
                 }
@@ -430,11 +426,11 @@
                     }
                 }
                 // Check if partner has Kleiner Fuchs, then it's Fuchs game
-                if (gameState.players[gameState.partner].hand.some(c => c.suit === 'grun' && c.rank === 'ober')) {
+                if (gameState.players[gameState.partner].hand.some(c => c.suit === 'grun' && c.rank === 'Ober')) {
                     gameState.isFuchsGame = true;
                 }
                 // If caller has both Fuchs and Kleiner, announce Fuchs im Haus
-                if (gameState.players[gameState.currentPlayer].hand.some(c => c.suit === 'grun' && c.rank === 'ober')) {
+                if (gameState.players[gameState.currentPlayer].hand.some(c => c.suit === 'grun' && c.rank === 'Ober')) {
                     gameState.isFuchsGame = true;
                     updateStatus(false,'Fuchs im Haus');
                 }
@@ -648,7 +644,7 @@
 
         // Get non-trump rank value (higher better)
         function getRankValue(card) {
-            const rankOrder = ['ass', 'zehner', 'koenig', 'ober', 'neuner', 'achter', 'bauer'];
+            const rankOrder = ['ass', 'Zehner', 'Koenig', 'Ober', 'Neuner', 'Achter', 'Bauer'];
             return rankOrder.length - rankOrder.indexOf(card.rank);
         }
 
