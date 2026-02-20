@@ -195,7 +195,7 @@
             { id: 3,  suit: 'grun',   rank: 'Bauer',  points: 2,  trumpRank: 4  },  // 4. Grun Bauer
             { id: 4,  suit: 'rot',    rank: 'Bauer',  points: 2,  trumpRank: 5  },  // 5. Rot Bauer
             { id: 5,  suit: 'schelle',rank: 'Bauer',  points: 2,  trumpRank: 6  },  // 6. Schelle Bauer
-            { id: 6,  suit: 'rot',    rank: 'ass',    points: 11, trumpRank: 7  },  // 7. Rot Ass
+            { id: 6,  suit: 'rot',    rank: 'Ass',    points: 11, trumpRank: 7  },  // 7. Rot Ass
             { id: 7,  suit: 'rot',    rank: 'Zehner', points: 10, trumpRank: 8  },  // 8. Rot Zehner
             { id: 8,  suit: 'rot',    rank: 'Koenig', points: 4,  trumpRank: 9  },  // 9. Rot König
             { id: 9,  suit: 'rot',    rank: 'Ober',   points: 3,  trumpRank: 10 },  // 10. Rot Ober
@@ -210,12 +210,12 @@
             { id: 14, suit: 'eichel', rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
             { id: 15, suit: 'eichel', rank: 'Neuner', points: 0,  trumpRank: null, rankOrder: 4 },
 
-            { id: 16, suit: 'grun',   rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 16, suit: 'grun',   rank: 'Ass',    points: 11, trumpRank: null, rankOrder: 1 },
             { id: 17, suit: 'grun',   rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
             { id: 18, suit: 'grun',   rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
             { id: 19, suit: 'grun',   rank: 'Neuner', points: 0,  trumpRank: null, rankOrder: 4 },
 
-            { id: 20, suit: 'schelle',rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 20, suit: 'schelle',rank: 'Ass',    points: 11, trumpRank: null, rankOrder: 1 },
             { id: 21, suit: 'schelle',rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
             { id: 22, suit: 'schelle',rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
             { id: 23, suit: 'schelle',rank: 'Ober',   points: 3,  trumpRank: null, rankOrder: 4 }
@@ -473,6 +473,7 @@
                 showPopup(`Player ${gameState.currentPlayer + 1} called: ${g.suit} ${g.rank}`);
 
             } else {
+                //TODO:FIX this - entirely broken atm 
                 partner = null;
                 gameState.isFuchsGame = hasKleine;
                 const aloneType = hasKleine ? 'Fuchs und Rote' : 'Rot ist Trumpf';
