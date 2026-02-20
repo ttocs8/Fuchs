@@ -1,52 +1,714 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>FUCHS</title>
-    <link rel="stylesheet" href="css/style5.css" />
-    <script src="jquery-3.2.1.min.js"></script>
-    <script src="jquery-ui.min.js"></script>
-    <script src="jquery.ui.touch-punch.js"></script>
-    <script src="jquery.ui.touch-punch.min.js"></script>
-    <script src="scripts/index6.js"></script>
+    <title>Fuchs Card Game</title>
     <style>
-       
-    
-     
+        body { font-family: Arial, sans-serif; background: #228B22; color: white; text-align: center; margin: 0; }
+        #game-container { 
+            max-width: 1400px; 
+            margin: auto; 
+            position: relative; 
+            height: 90vh; 
+            min-height: 700px;
+        }
+        .player-area { 
+            position: absolute; 
+            text-align: center; 
+        }
+        .player-hand { 
+            display: flex; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            margin: 10px auto; 
+        }
+        .card { 
+            width: 90px; 
+            height: 135px; 
+            background: white; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            margin: 4px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); 
+            overflow: hidden;
+        }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-back { 
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80') no-repeat center/cover; 
+            /* Replace above URL with your own card back image, e.g. 'images/card_back.png' */
+        }
+        .player-label { 
+            font-size: 18px; 
+            margin: 5px 0; 
+            font-weight: bold; 
+        }
+        .card-count { 
+            font-size: 14px; 
+            color: #ddd; 
+            margin-top: 5px; 
+        }
+        #player0 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        #player2 { top: 10px; left: 50%; transform: translateX(-50%); }
+        #player1 { left: 20px; top: 50%; transform: translateY(-50%) rotate(-90deg); width: 180px; }
+        #player3 { right: 20px; top: 50%; transform: translateY(-50%) rotate(90deg); width: 180px; }
+
+        #trick { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            gap: 15px; 
+        }
+        #start-status { 
+            position: absolute; 
+            top: 40vh; 
+            left: 35vw; 
+            transform: translateX(-50%); 
+            font-size: 22px; 
+            background: rgba(0,0,0,0.5); 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+        }
+        #status { 
+            position: absolute; 
+            bottom: 220px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            font-size: 22px; 
+            background: rgba(0,0,0,0.5); 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+        }
+        button { 
+            margin: 10px; 
+            padding: 12px 24px; 
+            font-size: 18px; 
+            cursor: pointer; 
+        }
+
+        /* Modal styles */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 10; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.6); 
+        }
+        .modal-content { 
+            background-color: #fefefe; 
+            margin: 15% auto; 
+            padding: 30px; 
+            border: 1px solid #888; 
+            width: 80%; 
+            max-width: 600px; 
+            text-align: center; 
+            color: black; 
+            border-radius: 12px; 
+            animation: flash 1s; 
+        }
+        @keyframes flash { 
+            0% { opacity: 0; transform: scale(0.7); } 
+            60% { opacity: 1; transform: scale(1.05); } 
+            100% { transform: scale(1); } 
+        }
+        .close { color: #aaa; float: right; font-size: 32px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        #call-options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+
+        #start-game {
+             display: block;      /* Changes the button from inline to block-level */
+  margin: 0 auto;      /
+            
+        }
     </style>
 </head>
-
-<body>  
-
-    <button onclick="startGame()" id="start-btn" style=" position: absolute; top: -1vh; left: 1vw;">Start Game</button>
-    <!-- <button onclick="nextTurn()" style=" position: absolute; top: -1vh; left: 10vw;">Do Action</button>
-     -->
-    <div id="log-container">
-        <h2 id="turnDisplay"></h2>
-        <h3 id="dealer"></h3>
-
-        <div id="log" style="visibility:hidden"></div>
-    </div>
-
-    <div id="table-container">
-        <div id="table">
-            <div class="player top" id="player2"></div>
-            <div class="player left" id="player1"></div>
-
-            <div class="center">
-                <div class="trick-area" id="trickArea"> <h1 style="color: #fdfa33; text-shadow: 1px 5px #000000;">FUCHS</h1></div>
-            </div>
-
-            <div class="player right" id="player3"></div>
-            <div class="player bottom" id="player0"></div>
-            <button onclick="SortHand(0)" id="sortButton" style=" position: relative; top: -15vh; left: 55vw; visibility: hidden;">Sort Hand</button>
-
+<body>
+    
+    <div id="game-container">
+        <div id="start-status">Welcome to Fuchs
+             <button id="start-game">Start Game</button>
         </div>
+
+        
+
+        <!-- Player areas in circle layout -->
+        <span id="PLAYAREA">
+        <div id="status">Welcome to Fuchs</div>
+        <div id="trick" class="trick"></div>
+
+        <div id="player0" class="player-area">
+            <div class="player-label">You (Player 1)</div>
+            <div id="player0-hand" class="player-hand"></div>
+        </div>
+
+        <div id="player1" class="player-area">
+            <div class="player-label">Player 2 (Left)</div>
+            <div id="player1-hand" class="player-hand"></div>
+            <div id="player1-count" class="card-count">6 cards</div>
+        </div>
+
+        <div id="player2" class="player-area">
+            <div class="player-label">Player 3 (Top)</div>
+            <div id="player2-hand" class="player-hand"></div>
+            <div id="player2-count" class="card-count">6 cards</div>
+        </div>
+
+        <div id="player3" class="player-area">
+            <div class="player-label">Player 4 (Right)</div>
+            <div id="player3-hand" class="player-hand"></div>
+            <div id="player3-count" class="card-count">6 cards</div>
+        </div>
+        </span>
+
+       
     </div>
     
 
+    <!-- Modal for popups -->
+    <div id="popup-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="popup-message"></p>
+            <div id="call-options"></div>
+            <button id="confirm-call" style="display:none; padding:12px 30px; font-size:18px;">Confirm</button>
+        </div>
+    </div>
 
+    <script>
+        // -----------------------------
+        // FUCHS GAME LOGIC (core unchanged, only UI modified)
+        // -----------------------------
+
+        const suits = ['eichel', 'grun', 'rot', 'schelle'];
+        const ranks = ['ober', 'bauer', 'ass', 'zehner', 'koenig', 'neuner', 'achter'];
+
+        const deckTemplate = [
+            // ────────────────────────────────────────────────
+            // Trump hierarchy order (strongest → weakest)
+            // ────────────────────────────────────────────────
+            { id: 0,  suit: 'eichel', rank: 'ober',   points: 4,  trumpRank: 1  },  // 1. Grosse Fuchs (Eichel Queen)
+            { id: 1,  suit: 'grun',   rank: 'ober',   points: 3,  trumpRank: 2  },  // 2. Kleiner Fuchs / Jee (Grun Queen)
+            { id: 2,  suit: 'eichel', rank: 'bauer',  points: 2,  trumpRank: 3  },  // 3. Eichel Bauer
+            { id: 3,  suit: 'grun',   rank: 'bauer',  points: 2,  trumpRank: 4  },  // 4. Grun Bauer
+            { id: 4,  suit: 'rot',    rank: 'bauer',  points: 2,  trumpRank: 5  },  // 5. Rot Bauer
+            { id: 5,  suit: 'schelle',rank: 'bauer',  points: 2,  trumpRank: 6  },  // 6. Schelle Bauer
+            { id: 6,  suit: 'rot',    rank: 'ass',    points: 11, trumpRank: 7  },  // 7. Rot Ass
+            { id: 7,  suit: 'rot',    rank: 'zehner', points: 10, trumpRank: 8  },  // 8. Rot Zehner
+            { id: 8,  suit: 'rot',    rank: 'koenig', points: 4,  trumpRank: 9  },  // 9. Rot König
+            { id: 9,  suit: 'rot',    rank: 'ober',   points: 3,  trumpRank: 10 },  // 10. Rot Ober
+            { id: 10, suit: 'rot',    rank: 'neuner', points: 0,  trumpRank: 11 },  // 11. Rot Neiner
+            { id: 11, suit: 'rot',    rank: 'achter', points: 0,  trumpRank: 12 },  // 12. Rot Achter
+
+            // ────────────────────────────────────────────────
+            // Non-trump cards (ordered roughly by suit strength / convention)
+            // ────────────────────────────────────────────────
+            { id: 12, suit: 'eichel', rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 13, suit: 'eichel', rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 14, suit: 'eichel', rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 15, suit: 'eichel', rank: 'neuner', points: 0,  trumpRank: null, rankOrder: 4 },
+
+            { id: 16, suit: 'grun',   rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 17, suit: 'grun',   rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 18, suit: 'grun',   rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 19, suit: 'grun',   rank: 'neuner', points: 0,  trumpRank: null, rankOrder: 4 },
+
+            { id: 20, suit: 'schelle',rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 21, suit: 'schelle',rank: 'zehner', points: 10, trumpRank: null, rankOrder: 2 },
+            { id: 22, suit: 'schelle',rank: 'koenig', points: 4,  trumpRank: null, rankOrder: 3 },
+            { id: 23, suit: 'schelle',rank: 'ober',   points: 3,  trumpRank: null, rankOrder: 4 }
+        ];
+
+        deckTemplate.forEach(card => {
+            card.image = `images/cards/${card.suit}/${card.rank}.png`; // your images
+        });
+
+        let gameState = {
+            phase: 'dealing',
+            players: [
+                {hand: [], score: 0, name: 'You'},
+                {hand: [], score: 0, name: 'Player 2'},
+                {hand: [], score: 0, name: 'Player 3'},
+                {hand: [], score: 0, name: 'Player 4'}
+            ],
+            dealer: 0,
+            caller: 0,
+            currentPlayer: 0,
+            trick: [],
+            calledCard: null,
+            partner: null,
+            isFuchsGame: false,
+            announcements: [],
+            teams: null,
+            wonTricks: [[],[],[],[]],
+            rotIsTrump: false,
+            callerHasCalled: false,
+            playedSuits: new Set()
+        };
+
+        // Modal controls (same as before)
+        const modal = document.getElementById('popup-modal');
+        const modalMessage = document.getElementById('popup-message');
+        const closeBtn = document.querySelector('.close');
+        const callOptionsDiv = document.getElementById('call-options');
+        const confirmCallBtn = document.getElementById('confirm-call');
+
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+
+        function showPopup(message, options = null, callback = null) {
+            modalMessage.textContent = message;
+            callOptionsDiv.innerHTML = '';
+            confirmCallBtn.style.display = 'none';
+
+            if (options) {
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.textContent = opt.label;
+                    btn.onclick = () => {
+                        modal.style.display = 'none';
+                        callback(opt.value);
+                    };
+                    callOptionsDiv.appendChild(btn);
+                });
+            } else if (callback) {
+                confirmCallBtn.style.display = 'inline-block';
+                confirmCallBtn.onclick = () => {
+                    modal.style.display = 'none';
+                    callback();
+                };
+            } else {
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    if (callback) callback();
+                }, 2800);
+            }
+            modal.style.display = 'block';
+        }
+
+        function shuffle(array) { 
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const sortHand = (a, b) => {
+            const ta = a.trumpRank ?? Infinity;
+            const tb = b.trumpRank ?? Infinity;
+            if (ta !== tb) return ta - tb;
+            const suitOrder = {eichel:0, grun:1, schelle:2};
+            const sa = suitOrder[a.suit] ?? 99;
+            const sb = suitOrder[b.suit] ?? 99;
+            if (sa !== sb) return sa - sb;
+            const rankOrder = {ass:0, zehner:1, koenig:2, ober:3, neuner:4, achter:5, bauer:6};
+            return (rankOrder[a.rank] ?? 99) - (rankOrder[b.rank] ?? 99);
+        };
+
+        function deal() {
+            let deck = shuffle([...deckTemplate]);
+            for (let i = 0; i < 4; i++) {
+                gameState.players[i].hand = deck.splice(0, 6);
+            }
+            for (let p = 0; p < 4; p++) {
+                if (gameState.players[p].hand.some(c => c.suit === 'eichel' && c.rank === 'ober')) {
+                    gameState.currentPlayer = p;
+                    break;
+                }
+            }
+            for (let i = 0; i < 4; i++) {
+                console.log(gameState.players[i].hand);
+            }
+            gameState.phase = 'calling';
+            updateStatus(`Player ${gameState.currentPlayer + 1} has the Fuchs and is calling.`);
+            gameState.caller = gameState.currentPlayer;
+            showPopup(`Calling Phase\nPlayer ${gameState.currentPlayer + 1} is calling the game!`);
+            setTimeout(handleCalling, 1200);
+        }
+
+        function renderHands() {
+            // Your hand - visible
+            const yourHand = document.getElementById('player0-hand');
+            yourHand.innerHTML = '';
+            gameState.players[0].hand.sort(sortHand);
+            gameState.players[0].hand.forEach((card, idx) => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                if (gameState.phase === 'gameplay' && gameState.currentPlayer === 0) {
+                    div.onclick = () => playCard(idx);
+                }
+                const img = document.createElement('img');
+                img.src = card.image;
+                div.appendChild(img);
+                yourHand.appendChild(div);
+            });
+
+            // Opponents - show card backs + count
+            [1,2,3].forEach(p => {
+                const handDiv = document.getElementById(`player${p}-hand`);
+                handDiv.innerHTML = '';
+                const count = gameState.players[p].hand.length;
+                document.getElementById(`player${p}-count`).textContent = `${count} card${count !== 1 ? 's' : ''}`;
+
+                for (let i = 0; i < 1; i++) {
+                    const back = document.createElement('div');
+                    back.className = 'card card-back';
+                    handDiv.appendChild(back);
+                }
+            });
+        }
+
+        function renderTrick() {
+            const trickDiv = document.getElementById('trick');
+            trickDiv.innerHTML = '';
+            gameState.trick.forEach(t => {
+                const c = document.createElement('div');
+                c.className = 'card';
+                const img = document.createElement('img');
+                img.src = t.card.image;
+                c.appendChild(img);
+                trickDiv.appendChild(c);
+            });
+        }
+
+        function updateStatus(isStartStatus, text) {
+            isStartStatus ? document.getElementById('start-status').textContent = text : document.getElementById('status').textContent = text;
+            console.log(text);
+        }
+
+        function handleCalling() { 
+            // For simplicity, assume player 0 is human, others AI
+            if (gameState.currentPlayer !== 0) {
+                // AI calling logic (stub)
+                aiCall();
+                return;
+            }
+            // Show call button for human
+           // document.getElementById('call-button').style.display = 'block';
+            updateStatus(false,'Make your call: Choose a card to call or special call.');
+            // Need UI for selecting call type, e.g., dropdown or buttons
+            // For now, stub with console prompt
+            const call = prompt('Enter call: e.g., "rot_ass" or "rot_is_trump" or "fuchs_und_rote"');
+            processCall(call); 
+        }
+
+        function processCall(call) { 
+            if(call === "ai"){
+                 // Find partner who has the called card
+                for (let p = 0; p < 4; p++) {
+                    if (p !== gameState.currentPlayer && gameState.players[p].hand.some(c => c.suit === gameState.calledCard.suit && c.rank === gameState.calledCard.rank)) {
+                        gameState.partner = p;
+                        gameState.teams = {team1: [gameState.currentPlayer, p], team2: [0,1,2,3].filter(q => q !== gameState.currentPlayer && q !== p)};
+                        break;
+                    }
+                }
+            }
+            else if (call === 'rot_is_trump') {
+                gameState.rotIsTrump = true;
+                gameState.teams = {team1: [gameState.currentPlayer], team2: [0,1,2,3].filter(p => p !== gameState.currentPlayer)};
+                gameState.isFuchsGame = false;
+            } else if (call === 'fuchs_und_rote') {
+                gameState.isFuchsGame = true;
+                gameState.teams = {team1: [gameState.currentPlayer], team2: [0,1,2,3].filter(p => p !== gameState.currentPlayer)};
+            } else {
+                // Normal call, parse suit_rank
+                const [suit, rank] = call.split('_');
+                gameState.calledCard = {suit, rank};
+                // Find partner who has the called card
+                for (let p = 0; p < 4; p++) {
+                    if (p !== gameState.currentPlayer && gameState.players[p].hand.some(c => c.suit === suit && c.rank === rank)) {
+                        gameState.partner = p;
+                        gameState.teams = {team1: [gameState.currentPlayer, p], team2: [0,1,2,3].filter(q => q !== gameState.currentPlayer && q !== p)};
+                        break;
+                    }
+                }
+                // Check if partner has Kleiner Fuchs, then it's Fuchs game
+                if (gameState.players[gameState.partner].hand.some(c => c.suit === 'grun' && c.rank === 'ober')) {
+                    gameState.isFuchsGame = true;
+                }
+                // If caller has both Fuchs and Kleiner, announce Fuchs im Haus
+                if (gameState.players[gameState.currentPlayer].hand.some(c => c.suit === 'grun' && c.rank === 'ober')) {
+                    gameState.isFuchsGame = true;
+                    updateStatus(false,'Fuchs im Haus');
+                }
+            }
+            gameState.callerHasCalled = true;
+
+            // Proceed to gameplay
+            gameState.phase = 'gameplay';
+            gameState.currentPlayer = (gameState.dealer + 1) % 4; // Left of dealer starts
+            //document.getElementById('call-button').style.display = 'none';
+            playTurn();
+        }
+
+        // AI call stub
+        function aiCall() {
+            let aihand = gameState.players[gameState.caller];
+            let hasKleine = aihand.hand.some(c => c.trumpRank === 2);
+           // let nonTrumpSuits = [...new Set(hand.filter(c => !c.isTrump).map(c => c.suit))];
+
+            let nonTrumpSuits = [...new Set(aihand.hand.filter(c => c.trumpRank == null).map(c => c.suit))];
+            let announcement = '';
+            if (hasKleine) announcement = ' (Fuchs im Haus)';
+            if (nonTrumpSuits.length > 0) {
+                let s = nonTrumpSuits[Math.floor(Math.random() * nonTrumpSuits.length)];
+                let suitCards = deckTemplate.filter(c => c.suit === s && c.trumpRank == null);
+                let handInSuit = aihand.hand.filter(c => c.suit === s);
+                let possible = suitCards.filter(c => !handInSuit.some(h => h.id === c.id));
+                let g = possible[Math.floor(Math.random() * possible.length)];
+                for (let p = 0; p < 4; p++) {
+                    if (p !== gameState.caller && gameState.players[p].hand.some(c => c.id === g.id)) {
+                        partner = p;
+                        break;
+                    }
+                }
+                isFuchsGame = hasKleine || (partner !== null && gameState.players[partner].hand.some(c => c.id === 1));
+                if (isFuchsGame && partner !== null) announcement = ' (Hat Fuchs)';
+                const [suit, rank] = `${g.suit}_${g.rank}`.split("_");
+                gameState.calledCard = {suit, rank};
+                updateStatus(false,`Player ${gameState.currentPlayer + 1} called: ${g.suit} ${g.rank}`);
+                showPopup(`Player ${gameState.currentPlayer + 1} called: ${g.suit} ${g.rank}`);
+
+            } else {
+                partner = null;
+                gameState.isFuchsGame = hasKleine;
+                const aloneType = hasKleine ? 'Fuchs und Rote' : 'Rot ist Trumpf';
+                updateStatus(false,`Player ${gameState.currentPlayer + 1} called: ${g.suit} ${g.rank}`);
+                showPopup(`Player ${gameState.currentPlayer + 1}  plays alone: ${aloneType}`);
+            }
+            
+            processCall("ai");
+            
+        }
+
+        function playTurn() {
+            renderHands();
+            renderTrick();
+            if (gameState.currentPlayer !== 0) {
+                setTimeout(aiPlay, 1400 + Math.random()*800);
+                return;
+            }
+            updateStatus(false,"Your turn – click a card to play");
+        }
+
+        function isLegalPlay(card, hand, trick) {
+            if(!gameState.callerHasCalled) return false;
+            if (trick.length === 0) return true;
+            let leadCard = trick[0].card;
+            let leadSuit = getEffectiveSuit(leadCard);
+            let hasSuit = hand.some(c => getEffectiveSuit(c) === leadSuit);
+            if (hasSuit && getEffectiveSuit(card) !== leadSuit) return false;
+            if (!hasSuit) {
+                let hasTrump = hand.some(c => c.trumpRank != null);
+                if (hasTrump && card.trumpRank == null) return false;
+            }
+            let currentHigh = getCurrentHigh(trick);
+            if ((leadCard.suit !== card.suit && canBeat(hand, currentHigh, leadSuit)) && !beats(card, currentHigh)) return false;
+
+            let gerufeneID = deckTemplate.find(card => gameState.calledCard.rank === card.rank &&  gameState.calledCard.suit === card.suit).id;
+            if (gameState.calledCard && card.id === gerufeneID && getEffectiveSuit(card) !== leadSuit && trick.length > 0 && !gameState.playedSuits.has(card.suit)) return false;
+            return true;
+        }
+
+        function getEffectiveSuit(card) {
+            return card.trumpRank != null ? 'trump' : card.suit;
+        }
+
+        function getCurrentHigh(trick) {
+            let high = trick[0].card;
+            for (let i = 1; i < trick.length; i++) {
+                if (beats(trick[i].card, high)) high = trick[i].card;
+            }
+            return high;
+        }
+
+        function beats(card1, card2) {
+            if (card1.trumpRank == null && card2.trumpRank == null) {
+                if (card1.suit !== card2.suit) return false;
+                return card1.rankOrder < card2.rankOrder;
+            }
+            if (card1.trumpRank != null && card2.trumpRank != null) return card1.trumpRank < card2.trumpRank;
+            if (card1.trumpRank != null) return true;
+            return false;
+        }
+
+         function canBeat(hand, currentHigh, leadSuit) {
+            return hand.some(c => getEffectiveSuit(c) === getEffectiveSuit(currentHigh) && beats(c, currentHigh));
+        }
+        
+        function playCard(index) {
+            if (gameState.currentPlayer !== 0) return;
+            const hand = gameState.players[0].hand;
+            const card = gameState.players[0].hand[index];
+
+            if (isLegalPlay(card, hand, gameState.trick)) {
+                gameState.players[0].hand.splice(index, 1)[0];
+                gameState.trick.push({player: 0, card});
+                renderHands();
+                renderTrick();
+                nextPlayer();
+            }
+            else{
+               // hand.splice(index,0,card);
+                alert('Illegal play');
+            }
+        }
+
+        function aiPlay() {
+            const p = gameState.currentPlayer;
+            const hand = gameState.players[p].hand;
+            if (hand.length === 0) return;
+            let card = null;
+
+            for (let c of hand) {
+                if (isLegalPlay(c, hand, gameState.trick)) {
+                    card = c;
+                    break;
+                }
+            }
+            hand.splice(hand.indexOf(card), 1);
+            console.log("Player " + (p+1) + " attempting to play " + card.suit + " " + card.rank)
+            updateStatus(false,"Player " + (p+1) + " played " + card.suit + " " + card.rank);
+
+            gameState.trick.push({player: p, card});
+            renderHands();
+            renderTrick();
+            nextPlayer();
+            
+        }
+
+        function nextPlayer() {
+            gameState.currentPlayer = (gameState.currentPlayer + 1) % 4;
+            if (gameState.trick.length < 4) {
+                playTurn();
+            } else {
+                setTimeout(resolveTrick, 1000);
+            }
+        }
+
+        function resolveTrick() { 
+            const winner = determineTrickWinner(gameState.trick);
+            showPopup(`Player ${winner + 1} wins the stich!`);
+            gameState.wonTricks[winner].push(...gameState.trick.map(t => t.card));
+            gameState.trick.forEach(({card}) => {
+                if (card.trumpRank != null) gameState.playedSuits.add(card.suit);
+            });
+            gameState.trick = [];
+            document.getElementById('trick').innerHTML = '';
+            gameState.currentPlayer = winner;
+            if (allHandsEmpty()) {
+                gameState.phase = 'counting';
+                countPoints();
+            } else {
+                setTimeout(playTurn, 1000); // Delay after resolving
+            }
+        }
+
+        // Determine trick winner
+        function determineTrickWinner(trick) {
+            let leadSuit = trick[0].card.suit;
+            let isTrumpLed = isTrump(trick[0].card);
+            let highest = {player: trick[0].player, card: trick[0].card};
+            for (let i = 1; i < trick.length; i++) {
+                const card = trick[i].card;
+                const isCurrentTrump = isTrump(card);
+                const isHighestTrump = isTrump(highest.card);
+                if (isCurrentTrump && !isHighestTrump) {
+                    highest = {player: trick[i].player, card};
+                } else if (isCurrentTrump && isHighestTrump) {
+                    if (getTrumpRank(card) < getTrumpRank(highest.card)) { // Lower rank is higher value
+                        highest = {player: trick[i].player, card};
+                    }
+                } else if (!isCurrentTrump && !isHighestTrump && card.suit === leadSuit) {
+                    if (getRankValue(card) > getRankValue(highest.card)) {
+                        highest = {player: trick[i].player, card};
+                    }
+                }
+            }
+            updateStatus(false, "WINNER: Player " + (highest.player + 1) + " takes the stich");
+            return highest.player;
+        }
+
+        // Is trump
+        function isTrump(card) {
+            return card.trumpRank !== null || (gameState.rotIsTrump && card.suit === 'rot');
+        }
+
+        // Get trump rank (lower number higher)
+        function getTrumpRank(card) {
+            return card.trumpRank;
+        }
+
+        // Get non-trump rank value (higher better)
+        function getRankValue(card) {
+            const rankOrder = ['ass', 'zehner', 'koenig', 'ober', 'neuner', 'achter', 'bauer'];
+            return rankOrder.length - rankOrder.indexOf(card.rank);
+        }
+
+        // Render trick
+        function renderTrick() {
+            const container = document.getElementById('trick');
+            container.innerHTML = '';
+            gameState.trick.forEach(t => {
+                const cardEl = document.createElement('div');
+                cardEl.classList.add('card');
+                const img = document.createElement('img');
+                img.src = t.card.image;
+                cardEl.appendChild(img);
+                container.appendChild(cardEl);
+            });
+        }
+
+        // Check if all hands empty
+        function allHandsEmpty() {
+            return gameState.players.every(p => p.hand.length === 0);
+        }
+
+        // Count points
+        function countPoints() {
+            document.getElementById('PLAYAREA').style.visibility="hidden";
+            document.getElementById('start-status').style.visibility="visible";
+
+            let team1Points = 0;
+            let team2Points = 0;
+            gameState.teams.team1.forEach(p => {
+                gameState.wonTricks[p].forEach(card => team1Points += card.points);
+            });
+            gameState.teams.team2.forEach(p => {
+                gameState.wonTricks[p].forEach(card => team2Points += card.points);
+            });
+            let winnerTeam = team1Points >= 61 ? 'team1' : 'team2';
+            let baseScore = gameState.isFuchsGame ? 3 : 1;
+            if (winnerTeam === 'team2') baseScore = -baseScore; // Loser pays
+            // Apply multipliers for kontra etc., stub
+            // No water if loser <30
+            if (winnerTeam === 'team1' && team2Points < 30) baseScore += 1;
+            else if (winnerTeam === 'team2' && team1Points < 30) baseScore -= 1;
+            // Durch etc., more logic needed
+            gameState.teams.team1.forEach(p => gameState.players[p].score += baseScore);
+            showPopup(`Game over.  P${gameState.teams.team1[0] + 1} and  P${gameState.teams.team1[1] + 1} points: ${team1Points},  P${gameState.teams.team2[0] + 1} and  P${gameState.teams.team2[1] + 1}: ${team2Points}. `);
+            updateStatus(true,`Game over.  P${gameState.teams.team1[0] + 1} and  P${gameState.teams.team1[1] + 1} points: ${team1Points}, P${gameState.teams.team2[0] + 1} and  P${gameState.teams.team2[1] + 1}: ${team2Points}. `);
+            // Reset for next round
+            gameState.dealer = (gameState.dealer + 1) % 4;
+            gameState.phase = 'dealing';
+        }
+
+        document.getElementById('PLAYAREA').style.visibility="hidden";
+        document.getElementById('start-game').onclick = () => {
+            document.getElementById('start-game').style.visibility="hidden";
+            document.getElementById('start-status').style.visibility="hidden";
+
+            document.getElementById('PLAYAREA').style.visibility="visible";
+            deal();
+            renderHands();
+        };
+    </script>
 </body>
-
 </html>
