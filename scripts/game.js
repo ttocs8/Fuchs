@@ -81,29 +81,40 @@ window.onload = function () {
         callOptionsDiv.innerHTML = '';
         confirmCallBtn.style.display = 'none';
 
+        // Clear any previous auto-close timer
+        if (window.popupTimer) {
+            clearTimeout(window.popupTimer);
+            window.popupTimer = null;
+        }
+
         if (options) {
+            // Show buttons → user must click → no auto-close
             options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.textContent = opt.label;
+                btn.textContent = opt;
                 btn.onclick = () => {
                     modal.style.display = 'none';
-                    callback(opt.value);
+                    callback(opt);
                 };
                 callOptionsDiv.appendChild(btn);
             });
+            modal.style.display = 'block';
         } else if (callback) {
+            // Show confirm button → user must click
             confirmCallBtn.style.display = 'inline-block';
             confirmCallBtn.onclick = () => {
                 modal.style.display = 'none';
                 callback();
             };
+            modal.style.display = 'block';
         } else {
-            setTimeout(() => {
+            // Temporary message (announcement, game over, etc.) → auto-close after delay
+            modal.style.display = 'block';
+            window.popupTimer = setTimeout(() => {
                 modal.style.display = 'none';
                 if (callback) callback();
             }, 2800);
         }
-        modal.style.display = 'block';
     }
 
     function shuffle(array) {
@@ -143,7 +154,7 @@ window.onload = function () {
         gameState.phase = 'calling';
         updateStatus(`Player ${gameState.currentPlayer + 1} has the Fuchs and is calling.`);
         gameState.caller = gameState.currentPlayer;
-        showPopup(`Calling Phase\nPlayer ${gameState.currentPlayer + 1} is calling the game!`);
+        showPopup(`Player ${gameState.currentPlayer + 1} is calling!`);
         setTimeout(handleCalling, 1200);
     }
 
@@ -209,8 +220,44 @@ window.onload = function () {
         updateStatus(false, 'Make your call: Choose a card to call or special call.');
         // Need UI for selecting call type, e.g., dropdown or buttons
         // For now, stub with console prompt
-        const call = prompt('Enter call: e.g., "rot_ass" or "rot_is_trump" or "fuchs_und_rote"');
-        processCall(call);
+        showCallingOptions();
+        // const call = prompt('Enter call: e.g., "rot_ass" or "rot_is_trump" or "fuchs_und_rote"');
+        //processCall(call);
+    }
+
+    function showCallingOptions() {
+        let hand = gameState.players[0].hand;
+        let hasFuchs = hand.some(c => c.id === 0); // Grosse Fuchs
+        let hasKleine = hand.some(c => c.id === 1);// Kleine Fuchs
+        let suitsInHand = [...new Set(hand.filter(c => c.trumpRank == null).map(c => c.suit))];
+        let possibleCalls = []
+        // Normal partner calls (card from suit you have)
+        if (suitsInHand.length > 0) {
+            suitsInHand.forEach(suit => {
+                possibleCalls.push( deckTemplate.filter(c =>
+                    c.suit === suit && c.trumpRank == null && !hand.some(h => h.id === c.id)
+                ));
+
+            });
+            let pCalls = [];
+            possibleCalls.flat().forEach(item => pCalls.push(`${item.suit} ${item.rank}`));
+            showPopup('Make your call:', pCalls, (value) => {
+                processCall(value);
+                showPopup(`You called: ${value.replace(/_/g, ' ')}`);
+            });
+        }
+
+        // Special calls
+        // let trumpStrength = calculateTrumpStrength(hand); // Stub: implement based on rules (weak/strong/very strong)
+        // possibleCalls.push({ label: 'Rot ist Trumpf', value: 'rot_is_trump' });
+        // if (hasKleine) {
+        //     possibleCalls.push({ label: 'Fuchs und Rote', value: 'fuchs_und_rote' });
+        //     if (trumpStrength === 'very strong') {
+        //         possibleCalls.push({ label: 'Fuchs und Durch', value: 'fuchs_und_durch' });
+        //     }
+        // }
+
+
     }
 
     function processCall(call) {
@@ -233,7 +280,7 @@ window.onload = function () {
             gameState.teams = { team1: [gameState.currentPlayer], team2: [0, 1, 2, 3].filter(p => p !== gameState.currentPlayer) };
         } else {
             // Normal call, parse suit_rank
-            const [suit, rank] = call.split('_');
+            const [suit, rank] = call.split(' ');
             gameState.calledCard = { suit, rank };
             // Find partner who has the called card
             for (let p = 0; p < 4; p++) {
