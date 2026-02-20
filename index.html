@@ -205,7 +205,7 @@
             // ────────────────────────────────────────────────
             // Non-trump cards (ordered roughly by suit strength)
             // ────────────────────────────────────────────────
-            { id: 12, suit: 'eichel', rank: 'ass',    points: 11, trumpRank: null, rankOrder: 1 },
+            { id: 12, suit: 'eichel', rank: 'Ass',    points: 11, trumpRank: null, rankOrder: 1 },
             { id: 13, suit: 'eichel', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
             { id: 14, suit: 'eichel', rank: 'Koenig', points: 4,  trumpRank: null, rankOrder: 3 },
             { id: 15, suit: 'eichel', rank: 'Neuner', points: 0,  trumpRank: null, rankOrder: 4 },
@@ -304,7 +304,7 @@
             const sa = suitOrder[a.suit] ?? 99;
             const sb = suitOrder[b.suit] ?? 99;
             if (sa !== sb) return sa - sb;
-            const rankOrder = {ass:0, Zehner:1, Koenig:2, Ober:3, Neuner:4, Achter:5, Bauer:6};
+            const rankOrder = {Ass:0, Zehner:1, Koenig:2, Ober:3, Neuner:4, Achter:5, Bauer:6};
             return (rankOrder[a.rank] ?? 99) - (rankOrder[b.rank] ?? 99);
         };
 
@@ -644,7 +644,7 @@
 
         // Get non-trump rank value (higher better)
         function getRankValue(card) {
-            const rankOrder = ['ass', 'Zehner', 'Koenig', 'Ober', 'Neuner', 'Achter', 'Bauer'];
+            const rankOrder = ['Ass', 'Zehner', 'Koenig', 'Ober', 'Neuner', 'Achter', 'Bauer'];
             return rankOrder.length - rankOrder.indexOf(card.rank);
         }
 
