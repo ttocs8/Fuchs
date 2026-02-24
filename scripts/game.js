@@ -1,46 +1,46 @@
 window.onload = function () {
 
-    const suits = ['eichel', 'grun', 'rot', 'schelle'];
+    const suits = ['Eichel', 'Grun', 'Rot', 'Schelle'];
     const ranks = ['Ober', 'Bauer', 'ass', 'Zehner', 'Koenig', 'Neuner', 'Achter'];
 
     const deckTemplate = [
         // ────────────────────────────────────────────────
         // Trump hierarchy order (strongest → weakest)
         // ────────────────────────────────────────────────
-        { id: 0, suit: 'eichel', rank: 'Ober', points: 4, trumpRank: 1 },  // 1. Grosse Fuchs 
-        { id: 1, suit: 'grun', rank: 'Ober', points: 3, trumpRank: 2 },  // 2. Kleiner Fuchs 
-        { id: 2, suit: 'eichel', rank: 'Bauer', points: 2, trumpRank: 3 },  // 3. Eichel Bauer
-        { id: 3, suit: 'grun', rank: 'Bauer', points: 2, trumpRank: 4 },  // 4. Grun Bauer
-        { id: 4, suit: 'rot', rank: 'Bauer', points: 2, trumpRank: 5 },  // 5. Rot Bauer
-        { id: 5, suit: 'schelle', rank: 'Bauer', points: 2, trumpRank: 6 },  // 6. Schelle Bauer
-        { id: 6, suit: 'rot', rank: 'Ass', points: 11, trumpRank: 7 },  // 7. Rot Ass
-        { id: 7, suit: 'rot', rank: 'Zehner', points: 10, trumpRank: 8 },  // 8. Rot Zehner
-        { id: 8, suit: 'rot', rank: 'Koenig', points: 4, trumpRank: 9 },  // 9. Rot König
-        { id: 9, suit: 'rot', rank: 'Ober', points: 3, trumpRank: 10 },  // 10. Rot Ober
-        { id: 10, suit: 'rot', rank: 'Neuner', points: 0, trumpRank: 11 },  // 11. Rot Neiner
-        { id: 11, suit: 'rot', rank: 'Achter', points: 0, trumpRank: 12 },  // 12. Rot Achter
+        { id: 0, suit: 'Eichel', rank: 'Ober', points: 4, trumpRank: 1 },  // 1. Grosse Fuchs 
+        { id: 1, suit: 'Grun', rank: 'Ober', points: 3, trumpRank: 2 },  // 2. Kleiner Fuchs 
+        { id: 2, suit: 'Eichel', rank: 'Bauer', points: 2, trumpRank: 3 },  // 3. Eichel Bauer
+        { id: 3, suit: 'Grun', rank: 'Bauer', points: 2, trumpRank: 4 },  // 4. Grun Bauer
+        { id: 4, suit: 'Rot', rank: 'Bauer', points: 2, trumpRank: 5 },  // 5. Rot Bauer
+        { id: 5, suit: 'Schelle', rank: 'Bauer', points: 2, trumpRank: 6 },  // 6. Schelle Bauer
+        { id: 6, suit: 'Rot', rank: 'Ass', points: 11, trumpRank: 7 },  // 7. Rot Ass
+        { id: 7, suit: 'Rot', rank: 'Zehner', points: 10, trumpRank: 8 },  // 8. Rot Zehner
+        { id: 8, suit: 'Rot', rank: 'Koenig', points: 4, trumpRank: 9 },  // 9. Rot König
+        { id: 9, suit: 'Rot', rank: 'Ober', points: 3, trumpRank: 10 },  // 10. Rot Ober
+        { id: 10, suit: 'Rot', rank: 'Neuner', points: 0, trumpRank: 11 },  // 11. Rot Neiner
+        { id: 11, suit: 'Rot', rank: 'Achter', points: 0, trumpRank: 12 },  // 12. Rot Achter
 
         // ────────────────────────────────────────────────
         // Non-trump cards (ordered roughly by suit strength)
         // ────────────────────────────────────────────────
-        { id: 12, suit: 'eichel', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
-        { id: 13, suit: 'eichel', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
-        { id: 14, suit: 'eichel', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
-        { id: 15, suit: 'eichel', rank: 'Neuner', points: 0, trumpRank: null, rankOrder: 4 },
+        { id: 12, suit: 'Eichel', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
+        { id: 13, suit: 'Eichel', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+        { id: 14, suit: 'Eichel', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
+        { id: 15, suit: 'Eichel', rank: 'Neuner', points: 0, trumpRank: null, rankOrder: 4 },
 
-        { id: 16, suit: 'grun', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
-        { id: 17, suit: 'grun', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
-        { id: 18, suit: 'grun', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
-        { id: 19, suit: 'grun', rank: 'Neuner', points: 0, trumpRank: null, rankOrder: 4 },
+        { id: 16, suit: 'Grun', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
+        { id: 17, suit: 'Grun', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+        { id: 18, suit: 'Grun', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
+        { id: 19, suit: 'Grun', rank: 'Neuner', points: 0, trumpRank: null, rankOrder: 4 },
 
-        { id: 20, suit: 'schelle', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
-        { id: 21, suit: 'schelle', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
-        { id: 22, suit: 'schelle', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
-        { id: 23, suit: 'schelle', rank: 'Ober', points: 3, trumpRank: null, rankOrder: 4 }
+        { id: 20, suit: 'Schelle', rank: 'Ass', points: 11, trumpRank: null, rankOrder: 1 },
+        { id: 21, suit: 'Schelle', rank: 'Zehner', points: 10, trumpRank: null, rankOrder: 2 },
+        { id: 22, suit: 'Schelle', rank: 'Koenig', points: 4, trumpRank: null, rankOrder: 3 },
+        { id: 23, suit: 'Schelle', rank: 'Ober', points: 3, trumpRank: null, rankOrder: 4 }
     ];
 
     deckTemplate.forEach(card => {
-        card.image = `images/cards/${card.suit}/${card.rank}.png`; // your images
+        card.image = `images/cards/${card.suit.toLowerCase()}/${card.rank}.png`; // your images
     });
 
     let gameState = {
@@ -58,10 +58,11 @@ window.onload = function () {
         calledCard: null,
         partner: null,
         isFuchsGame: false,
+        isFuchsImHaus: false,
         announcements: [],
         teams: null,
         wonTricks: [[], [], [], []],
-        rotIsTrump: false,
+        RotIsTrump: false,
         callerHasCalled: false,
         playedSuits: new Set()
     };
@@ -88,10 +89,14 @@ window.onload = function () {
         }
 
         if (options) {
-            // Show buttons → user must click → no auto-close
+            //calling options
             options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.textContent = opt;
+                let extra ="";
+                if (gameState.isFuchsImHaus)
+                    extra = "Fuchs im Haus - ";
+
+                btn.textContent = extra + opt ;
                 btn.onclick = () => {
                     modal.style.display = 'none';
                     callback(opt);
@@ -129,7 +134,7 @@ window.onload = function () {
         const ta = a.trumpRank ?? Infinity;
         const tb = b.trumpRank ?? Infinity;
         if (ta !== tb) return ta - tb;
-        const suitOrder = { eichel: 0, grun: 1, schelle: 2 };
+        const suitOrder = { Eichel: 0, Grun: 1, Schelle: 2 };
         const sa = suitOrder[a.suit] ?? 99;
         const sb = suitOrder[b.suit] ?? 99;
         if (sa !== sb) return sa - sb;
@@ -143,7 +148,7 @@ window.onload = function () {
             gameState.players[i].hand = deck.splice(0, 6);
         }
         for (let p = 0; p < 4; p++) {
-            if (gameState.players[p].hand.some(c => c.suit === 'eichel' && c.rank === 'Ober')) {
+            if (gameState.players[p].hand.some(c => c.suit === 'Eichel' && c.rank === 'Ober')) {
                 gameState.currentPlayer = p;
                 break;
             }
@@ -203,12 +208,14 @@ window.onload = function () {
         });
     }
 
-    function updateStatus(isStartStatus, text) {
-        isStartStatus ? document.getElementById('start-status').textContent = text : document.getElementById('status').textContent = text;
+    function updateStatus(isEndStatus, text) {
+        isEndStatus ? document.getElementById('end-status').textContent = text : document.getElementById('status').textContent = text;
         console.log(text);
     }
 
     function handleCalling() {
+        gameState.players[gameState.currentPlayer].hand.forEach((item, index, arr) => {if(arr[0].id == 0 && arr[1].id == 1) gameState.isFuchsImHaus = true;});
+    
         // For simplicity, assume player 0 is human, others AI
         if (gameState.currentPlayer !== 0) {
             // AI calling logic (stub)
@@ -221,7 +228,7 @@ window.onload = function () {
         // Need UI for selecting call type, e.g., dropdown or buttons
         // For now, stub with console prompt
         showCallingOptions();
-        // const call = prompt('Enter call: e.g., "rot_ass" or "rot_is_trump" or "fuchs_und_rote"');
+        // const call = prompt('Enter call: e.g., "Rot_ass" or "Rot_is_trump" or "fuchs_und_Rote"');
         //processCall(call);
     }
 
@@ -240,6 +247,7 @@ window.onload = function () {
 
             });
             let pCalls = [];
+
             possibleCalls.flat().forEach(item => pCalls.push(`${item.suit} ${item.rank}`));
             showPopup('Make your call:', pCalls, (value) => {
                 processCall(value);
@@ -249,9 +257,9 @@ window.onload = function () {
 
         // Special calls
         // let trumpStrength = calculateTrumpStrength(hand); // Stub: implement based on rules (weak/strong/very strong)
-        // possibleCalls.push({ label: 'Rot ist Trumpf', value: 'rot_is_trump' });
+        // possibleCalls.push({ label: 'Rot ist Trumpf', value: 'Rot_is_trump' });
         // if (hasKleine) {
-        //     possibleCalls.push({ label: 'Fuchs und Rote', value: 'fuchs_und_rote' });
+        //     possibleCalls.push({ label: 'Fuchs und Rote', value: 'fuchs_und_Rote' });
         //     if (trumpStrength === 'very strong') {
         //         possibleCalls.push({ label: 'Fuchs und Durch', value: 'fuchs_und_durch' });
         //     }
@@ -271,33 +279,34 @@ window.onload = function () {
                 }
             }
         }
-        else if (call === 'rot_is_trump') {
-            gameState.rotIsTrump = true;
+        else if (call === 'Rot_is_trump') {
+            gameState.RotIsTrump = true;
             gameState.teams = { team1: [gameState.currentPlayer], team2: [0, 1, 2, 3].filter(p => p !== gameState.currentPlayer) };
             gameState.isFuchsGame = false;
-        } else if (call === 'fuchs_und_rote') {
+        } else if (call === 'fuchs_und_Rote') {
             gameState.isFuchsGame = true;
+            gameState.isFuchsImHaus = true;
             gameState.teams = { team1: [gameState.currentPlayer], team2: [0, 1, 2, 3].filter(p => p !== gameState.currentPlayer) };
         } else {
             // Normal call, parse suit_rank
             const [suit, rank] = call.split(' ');
-            gameState.calledCard = { suit, rank };
+            gameState.calledCard = deckTemplate.find(card =>  card.suit === suit && card.rank === rank);
             // Find partner who has the called card
             for (let p = 0; p < 4; p++) {
-                if (p !== gameState.currentPlayer && gameState.players[p].hand.some(c => c.suit === suit && c.rank === rank)) {
+                if (p !== gameState.currentPlayer && gameState.players[p].hand.some(c => c.id === gameState.calledCard.id)) {
                     gameState.partner = p;
                     gameState.teams = { team1: [gameState.currentPlayer, p], team2: [0, 1, 2, 3].filter(q => q !== gameState.currentPlayer && q !== p) };
                     break;
                 }
             }
             // Check if partner has Kleiner Fuchs, then it's Fuchs game
-            if (gameState.players[gameState.partner].hand.some(c => c.suit === 'grun' && c.rank === 'Ober')) {
+            if (gameState.players[gameState.partner].hand.some(c => c.id === 1)) {
                 gameState.isFuchsGame = true;
             }
             // If caller has both Fuchs and Kleiner, announce Fuchs im Haus
-            if (gameState.players[gameState.currentPlayer].hand.some(c => c.suit === 'grun' && c.rank === 'Ober')) {
+            if (gameState.players[gameState.currentPlayer].hand.some(c => c.id === 1)) {
                 gameState.isFuchsGame = true;
-                updateStatus(false, 'Fuchs im Haus');
+                gameState.isFuchsImHaus = true;
             }
         }
         gameState.callerHasCalled = true;
@@ -357,7 +366,7 @@ window.onload = function () {
             setTimeout(aiPlay, 1400 + Math.random() * 800);
             return;
         }
-        updateStatus(false, "Your turn – click a card to play");
+        updateStatus(false, "Your turn!");
     }
 
     function isLegalPlay(card, hand, trick) {
@@ -500,7 +509,7 @@ window.onload = function () {
 
     // Is trump
     function isTrump(card) {
-        return card.trumpRank !== null || (gameState.rotIsTrump && card.suit === 'rot');
+        return card.trumpRank !== null || (gameState.RotIsTrump && card.suit === 'Rot');
     }
 
     // Get trump rank (lower number higher)
@@ -536,7 +545,7 @@ window.onload = function () {
     // Count points
     function countPoints() {
         document.getElementById('PLAYAREA').style.visibility = "hidden";
-        document.getElementById('start-status').style.visibility = "visible";
+        document.getElementById('end-status').style.visibility = "visible";
 
         let team1Points = 0;
         let team2Points = 0;
@@ -563,9 +572,12 @@ window.onload = function () {
     }
 
     document.getElementById('PLAYAREA').style.visibility = "hidden";
+    document.getElementById('end-status').style.visibility = "hidden";
+
     document.getElementById('start-game').onclick = () => {
         document.getElementById('start-game').style.visibility = "hidden";
         document.getElementById('start-status').style.visibility = "hidden";
+
 
         document.getElementById('PLAYAREA').style.visibility = "visible";
         deal();

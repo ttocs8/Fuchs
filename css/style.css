@@ -104,10 +104,19 @@ body {
 	transform: translateX(-50%);
 	font-size: 22px;
 	background: rgba(0, 0, 0, 0.5);
-	padding: 10px 20px;
+	padding: 1em 1em;
 	border-radius: 10px;
 }
-
+#end-status {
+	position: absolute;
+	top: 40vh;
+	left: 35vw;
+	transform: translateX(-50%);
+	font-size: 22px;
+	background: rgba(0, 0, 0, 0.5);
+	padding: 1em 1em;
+	border-radius: 10px;
+}
 #status {
 	position: absolute;
 	bottom: 220px;
@@ -189,4 +198,6 @@ button {
 #start-game {
 	display: block;
 	margin: 0 auto;
+	position: relative;
+	top: 1vh;
 }
