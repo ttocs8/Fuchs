@@ -1,3 +1,8 @@
+:root {
+  --card-width: 85px; 
+  --card-height: 127px;
+}
+
 body {
 	font-family: Arial, sans-serif;
 	background: #228B22;
@@ -27,8 +32,8 @@ body {
 }
 
 .card {
-	width: 90px;
-	height: 135px;
+	width: var(--card-width);
+	height: var(--card-height);
 	background: white;
 	border: 2px solid #333;
 	border-radius: 8px;
@@ -63,6 +68,7 @@ body {
 #player0 {
 	bottom: 10px;
 	left: 50%;
+	min-width: calc(50% + (var(--card-width)) * 2);
 	transform: translateX(-50%);
 }
 
