@@ -572,7 +572,7 @@ window.onload = function () {
     }
 
     document.getElementById('PLAYAREA').style.visibility = "hidden";
-    document.getElementById('end-status').style.visibility = "hidden";
+    //document.getElementById('end-status').style.visibility = "hidden";
 
     document.getElementById('start-game').onclick = () => {
         document.getElementById('start-game').style.visibility = "hidden";

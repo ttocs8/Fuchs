@@ -108,6 +108,7 @@ body {
 	border-radius: 10px;
 }
 #end-status {
+	visibility: hidden;
 	position: absolute;
 	top: 40vh;
 	left: 35vw;
