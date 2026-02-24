@@ -1,3 +1,8 @@
+:root {
+  --card-width: 85px; 
+  --card-height: 127px;
+}
+
 body {
 	font-family: Arial, sans-serif;
 	background: #228B22;
