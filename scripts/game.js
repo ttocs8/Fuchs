@@ -89,17 +89,18 @@ window.onload = function () {
         }
 
         if (options) {
-            //calling options
             options.forEach(opt => {
                 const btn = document.createElement('button');
-                let extra ="";
+                let extra = "";
                 if (gameState.isFuchsImHaus)
                     extra = "Fuchs im Haus - ";
 
-                btn.textContent = extra + opt ;
+                btn.textContent = extra + opt.label;  // assuming your options now have .label
+                btn.dataset.suit = opt.suit || '';    // ← ADD THIS LINE (suit name from your option object)
+
                 btn.onclick = () => {
                     modal.style.display = 'none';
-                    callback(opt);
+                    callback(opt.value);
                 };
                 callOptionsDiv.appendChild(btn);
             });
@@ -214,8 +215,8 @@ window.onload = function () {
     }
 
     function handleCalling() {
-        gameState.players[gameState.currentPlayer].hand.forEach((item, index, arr) => {if(arr[0].id == 0 && arr[1].id == 1) gameState.isFuchsImHaus = true;});
-    
+        gameState.players[gameState.currentPlayer].hand.forEach((item, index, arr) => { if (arr[0].id == 0 && arr[1].id == 1) gameState.isFuchsImHaus = true; });
+
         // For simplicity, assume player 0 is human, others AI
         if (gameState.currentPlayer !== 0) {
             // AI calling logic (stub)
@@ -232,7 +233,27 @@ window.onload = function () {
         //processCall(call);
     }
 
+    function renderModalHandPreview() {
+
+        
+        const preview = document.getElementById('modal-hand-preview');
+        if (!preview) return;
+        preview.innerHTML = '';
+        const sorted = [...gameState.players[0].hand].sort(sortHand);
+        sorted.forEach(card => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            const img = document.createElement('img');
+            img.src = card.image;
+            div.appendChild(img);
+            preview.appendChild(div);
+        });
+        
+        
+    }
+
     function showCallingOptions() {
+        renderModalHandPreview();
         let hand = gameState.players[0].hand;
         let hasFuchs = hand.some(c => c.id === 0); // Grosse Fuchs
         let hasKleine = hand.some(c => c.id === 1);// Kleine Fuchs
@@ -241,14 +262,19 @@ window.onload = function () {
         // Normal partner calls (card from suit you have)
         if (suitsInHand.length > 0) {
             suitsInHand.forEach(suit => {
-                possibleCalls.push( deckTemplate.filter(c =>
+                possibleCalls.push(deckTemplate.filter(c =>
                     c.suit === suit && c.trumpRank == null && !hand.some(h => h.id === c.id)
                 ));
 
             });
             let pCalls = [];
+            possibleCalls.flat().forEach(g => pCalls.push({
+                label: `${g.suit} ${g.rank} `,
+                value: `${g.suit.toLowerCase()}_${g.rank.toLowerCase()}`,
+                suit: g.suit
+            }));
 
-            possibleCalls.flat().forEach(item => pCalls.push(`${item.suit} ${item.rank}`));
+           
             showPopup('Make your call:', pCalls, (value) => {
                 processCall(value);
                 showPopup(`You called: ${value.replace(/_/g, ' ')}`);
@@ -269,6 +295,10 @@ window.onload = function () {
     }
 
     function processCall(call) {
+        //remove hand preview in popup
+        const preview = document.getElementById('modal-hand-preview');
+        while ( preview.firstChild ) preview.removeChild( preview.firstChild );
+
         if (call === "ai") {
             // Find partner who has the called card
             for (let p = 0; p < 4; p++) {
@@ -289,8 +319,8 @@ window.onload = function () {
             gameState.teams = { team1: [gameState.currentPlayer], team2: [0, 1, 2, 3].filter(p => p !== gameState.currentPlayer) };
         } else {
             // Normal call, parse suit_rank
-            const [suit, rank] = call.split(' ');
-            gameState.calledCard = deckTemplate.find(card =>  card.suit === suit && card.rank === rank);
+            const [suit, rank] = call.split('_');
+            gameState.calledCard = deckTemplate.find(card => card.suit.toLowerCase() === suit.toLowerCase() && card.rank.toLowerCase() === rank.toLowerCase());
             // Find partner who has the called card
             for (let p = 0; p < 4; p++) {
                 if (p !== gameState.currentPlayer && gameState.players[p].hand.some(c => c.id === gameState.calledCard.id)) {
@@ -466,7 +496,7 @@ window.onload = function () {
 
     function resolveTrick() {
         const winner = determineTrickWinner(gameState.trick);
-        showPopup(`Player ${winner + 1} wins the stich!`);
+        showPopup(`Player ${winner + 1} takes the stich!`);
         gameState.wonTricks[winner].push(...gameState.trick.map(t => t.card));
         gameState.trick.forEach(({ card }) => {
             if (card.trumpRank != null) gameState.playedSuits.add(card.suit);

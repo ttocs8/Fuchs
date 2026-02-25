@@ -1,6 +1,6 @@
 :root {
-  --card-width: 85px; 
-  --card-height: 127px;
+  --card-width: 100px; 
+  --card-height: 166px;
 }
 
 body {
@@ -66,7 +66,7 @@ body {
 }
 
 #player0 {
-	bottom: 10px;
+	bottom: -1%;
 	left: 50%;
 	min-width: 70%;
 	transform: translateX(-50%);
@@ -156,7 +156,7 @@ button {
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 15% auto;
+	margin: 12% auto;
 	padding: 30px;
 	border: 1px solid #888;
 	width: 80%;
@@ -165,6 +165,7 @@ button {
 	color: black;
 	border-radius: 12px;
 	animation: flash 1s;
+	box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Added shadow for depth */
 }
 
 @keyframes flash {
@@ -181,6 +182,13 @@ button {
 	100% {
 		transform: scale(1);
 	}
+}
+
+#popup-message {
+	font-size: 24px; /* Larger title */
+	font-weight: bold;
+	color: #228B22; /* Green title to match theme */
+	margin-bottom: 20px;
 }
 
 .close {
@@ -202,9 +210,78 @@ button {
 	margin: 20px 0;
 }
 
+/* Call options buttons with suit colors */
+#call-options button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Default fallback */
+#call-options button {
+    background-color: #555; /* neutral if no suit match */
+}
+
+/* Eichel - Light Brown */
+#call-options button[data-suit="Eichel"],
+#call-options button[data-suit="eichel"] {
+    background-color: #D2B48C;
+    color: #2F1B0F; /* dark text for contrast */
+}
+
+/* Grun - Green */
+#call-options button[data-suit="Grun"],
+#call-options button[data-suit="grun"] {
+    background-color: #228B22;
+}
+
+/* Rot - Red */
+#call-options button[data-suit="Rot"],
+#call-options button[data-suit="rot"] {
+    background-color: #C41E3A;
+}
+
+/* Schelle - Yellow/Gold */
+#call-options button[data-suit="Schelle"],
+#call-options button[data-suit="schelle"] {
+    background-color: #FFD700;
+    color: #1A1A1A; /* dark text for readability */
+}
+
+/* Hover effects for all suit buttons */
+#call-options button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Optional: slightly darker on active/click */
+#call-options button:active {
+    transform: scale(0.98);
+}
+
 #start-game {
 	display: block;
 	margin: 0 auto;
 	position: relative;
 	top: 1vh;
+}
+
+#modal-hand-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 5px;
+}
+
+#modal-hand-preview .card {
+    width: 60px;
+    height: 90px;
+    margin: 2px;
 }
