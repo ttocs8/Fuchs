@@ -285,3 +285,78 @@ button {
     height: 90px;
     margin: 2px;
 }
+
+/* Force full-screen, viewport-relative positioning for end-status */
+#end-status {
+    position: absolute;
+	top: 5%;
+	left: 50%;
+	width: 85%;	
+	height: 85%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 999;
+    backdrop-filter: blur(4px);
+}
+
+/* Inner panel - centered with responsive width */
+.end-panel {
+    background: linear-gradient(135deg, #1a3c34, #0d5c2f);
+    border-radius: 20px;
+    padding: 40px 60px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    border: 3px solid #FFD700;
+    max-width: 700px;
+    width: 85%;
+    text-align: center;
+    color: white;
+}
+
+/* Ensure no clipping from parent */
+#game-container {
+    overflow: visible !important;
+}
+
+.end-panel h2 {
+    font-size: 48px;
+    margin: 0 0 25px;
+    color: #FFD700;
+    text-shadow: 0 0 15px rgba(255,215,0,0.8);
+}
+
+.result-container {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.result-container .winner {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 32px;
+    margin: 15px 0;
+}
+
+.result-container .score {
+    font-size: 28px;
+    margin: 10px 0;
+}
+
+.end-footer {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #ccc;
+    font-style: italic;
+}
+
+/* Trick fly-to-winner animation */
+#trick.animate-to-winner {
+    transition: all 1.5s ease-out;
+}
+
+#trick.animate-to-p0 { transform: translate(-50%, 30vh) scale(0.6) !important; }
+#trick.animate-to-p1 { transform: translate(-37vw, -20vh) scale(0.6) rotate(-90deg) !important; }
+#trick.animate-to-p2 { transform: translate(-50%, -40vh) scale(0.6) !important; }
+#trick.animate-to-p3 { transform: translate(18vw, -20vh) scale(0.6) rotate(90deg) !important; }

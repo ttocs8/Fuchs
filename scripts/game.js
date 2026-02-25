@@ -64,7 +64,8 @@ window.onload = function () {
         wonTricks: [[], [], [], []],
         RotIsTrump: false,
         callerHasCalled: false,
-        playedSuits: new Set()
+        playedSuits: new Set(),
+        currentStatus: ""
     };
 
     // Modal controls
@@ -235,7 +236,7 @@ window.onload = function () {
 
     function renderModalHandPreview() {
 
-        
+
         const preview = document.getElementById('modal-hand-preview');
         if (!preview) return;
         preview.innerHTML = '';
@@ -248,8 +249,8 @@ window.onload = function () {
             div.appendChild(img);
             preview.appendChild(div);
         });
-        
-        
+
+
     }
 
     function showCallingOptions() {
@@ -274,7 +275,7 @@ window.onload = function () {
                 suit: g.suit
             }));
 
-           
+
             showPopup('Make your call:', pCalls, (value) => {
                 processCall(value);
                 showPopup(`You called: ${value.replace(/_/g, ' ')}`);
@@ -297,7 +298,7 @@ window.onload = function () {
     function processCall(call) {
         //remove hand preview in popup
         const preview = document.getElementById('modal-hand-preview');
-        while ( preview.firstChild ) preview.removeChild( preview.firstChild );
+        while (preview.firstChild) preview.removeChild(preview.firstChild);
 
         if (call === "ai") {
             // Find partner who has the called card
@@ -463,25 +464,31 @@ window.onload = function () {
     }
 
     function aiPlay() {
-        const p = gameState.currentPlayer;
-        const hand = gameState.players[p].hand;
-        if (hand.length === 0) return;
-        let card = null;
+        try {
+            const p = gameState.currentPlayer;
+            const hand = gameState.players[p].hand;
+            if (hand.length === 0) return;
+            let card = null;
 
-        for (let c of hand) {
-            if (isLegalPlay(c, hand, gameState.trick)) {
-                card = c;
-                break;
+            for (let c of hand) {
+                if (isLegalPlay(c, hand, gameState.trick)) {
+                    card = c;
+                    break;
+                }
             }
-        }
-        hand.splice(hand.indexOf(card), 1);
-        console.log("Player " + (p + 1) + " attempting to play " + card.suit + " " + card.rank)
-        updateStatus(false, "Player " + (p + 1) + " played " + card.suit + " " + card.rank);
+            hand.splice(hand.indexOf(card), 1);
+            console.log("Player " + (p + 1) + " attempting to play " + card.suit + " " + card.rank)
+            updateStatus(false, "Player " + (p + 1) + " played " + card.suit + " " + card.rank);
 
-        gameState.trick.push({ player: p, card });
-        renderHands();
-        renderTrick();
-        nextPlayer();
+            gameState.trick.push({ player: p, card });
+            renderHands();
+            renderTrick();
+            nextPlayer();
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
 
     }
 
@@ -496,20 +503,35 @@ window.onload = function () {
 
     function resolveTrick() {
         const winner = determineTrickWinner(gameState.trick);
-        showPopup(`Player ${winner + 1} takes the stich!`);
-        gameState.wonTricks[winner].push(...gameState.trick.map(t => t.card));
-        gameState.trick.forEach(({ card }) => {
-            if (card.trumpRank != null) gameState.playedSuits.add(card.suit);
-        });
-        gameState.trick = [];
-        document.getElementById('trick').innerHTML = '';
-        gameState.currentPlayer = winner;
-        if (allHandsEmpty()) {
-            gameState.phase = 'counting';
-            countPoints();
-        } else {
-            setTimeout(playTurn, 1000); // Delay after resolving
-        }
+
+        // Start fly animation toward winner
+        const trickEl = document.getElementById('trick');
+        trickEl.classList.add('animate-to-winner');
+
+        // Add class based on winner position (p0=bottom, p1=left, p2=top, p3=right)
+        if (winner === 0) trickEl.classList.add('animate-to-p0');
+        else if (winner === 1) trickEl.classList.add('animate-to-p1');
+        else if (winner === 2) trickEl.classList.add('animate-to-p2');
+        else if (winner === 3) trickEl.classList.add('animate-to-p3');
+
+        // After animation finishes, clean up and proceed
+        setTimeout(() => {
+            // Remove animation classes
+            trickEl.classList.remove('animate-to-winner', 'animate-to-p0', 'animate-to-p1', 'animate-to-p2', 'animate-to-p3');
+
+            // Now actually move cards to wonTricks and clear trick
+            gameState.wonTricks[winner].push(...gameState.trick.map(t => t.card));
+            gameState.trick = [];
+            document.getElementById('trick').innerHTML = '';
+            gameState.currentPlayer = winner;
+
+            if (allHandsEmpty()) {
+                gameState.phase = 'counting';
+                countPoints();
+            } else {
+                setTimeout(playTurn, 800); // slightly shorter delay after animation
+            }
+        }, 1600); // matches transition duration (1.5s + buffer)
     }
 
     // Determine trick winner
@@ -533,7 +555,7 @@ window.onload = function () {
                 }
             }
         }
-        updateStatus(false, "WINNER: Player " + (highest.player + 1) + " takes the stich");
+        updateStatus(false, "Player " + (highest.player + 1) + " takes the stich");
         return highest.player;
     }
 
@@ -594,8 +616,27 @@ window.onload = function () {
         else if (winnerTeam === 'team2' && team1Points < 30) baseScore -= 1;
         // Durch etc., more logic needed
         gameState.teams.team1.forEach(p => gameState.players[p].score += baseScore);
-        showPopup(`Game over.  P${gameState.teams.team1[0] + 1} and  P${gameState.teams.team1[1] + 1} points: ${team1Points},  P${gameState.teams.team2[0] + 1} and  P${gameState.teams.team2[1] + 1}: ${team2Points}. `);
-        updateStatus(true, `Game over.  P${gameState.teams.team1[0] + 1} and  P${gameState.teams.team1[1] + 1} points: ${team1Points}, P${gameState.teams.team2[0] + 1} and  P${gameState.teams.team2[1] + 1}: ${team2Points}. `);
+
+        // Rich end screen content
+        let resultHTML = `
+        <div class="result-container">
+            <div class="${winnerTeam === 'team1' ? 'winner' : 'loser'}">
+                ${winnerTeam === 'team1' ? 'Victory!' : 'Defeat!'}
+            </div>
+            <div class="score">
+                Team 1 (P${gameState.teams.team1.map(p => p + 1).join(' & ')}): <strong>${team1Points}</strong> pts
+            </div>
+            <div class="score">
+                Team 2 (P${gameState.teams.team2.map(p => p + 1).join(' & ')}): <strong>${team2Points}</strong> pts
+            </div>
+            ${team1Points < 30 || team2Points < 30 ? '<div style="color:#ffcc00; margin-top:15px;">No Water! +1 penalty applied</div>' : ''}
+        </div>
+
+        <button> Play Again </button>
+    `;
+
+        document.getElementById('end-status').innerHTML = resultHTML;
+
         // Reset for next round
         gameState.dealer = (gameState.dealer + 1) % 4;
         gameState.phase = 'dealing';

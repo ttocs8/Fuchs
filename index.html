@@ -13,14 +13,20 @@
 
 <body>
     <script src="scripts/game.js"></script>
+
+    <div id="end-status" style="visibility: hidden;">
+        <div class="end-panel">
+            <h2>Game Over</h2>
+            <div id="end-result" class="result-container"></div>
+            <div class="end-footer">Thanks for playing Fuchs!</div>
+        </div>
+    </div>
+
     <div id="game-container">
         
         <div id="start-status">
             <span style="font-weight: bold; font-family:Verdana;"> Welcome to Fuchs </span>
             <button id="start-game">Start Game</button>
-        </div>
-        <div id="end-status">
-            <span style="font-weight: bold; font-family:Verdana;"> Welcome to Fuchs </span>
         </div>
 
         <!-- Player areas in circle layout -->
@@ -54,7 +60,6 @@
 
 
     </div>
-
 
     <!-- Modal for popups -->
     <div id="popup-modal" class="modal">
