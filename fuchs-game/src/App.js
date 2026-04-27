@@ -213,7 +213,7 @@ export default function FuchsGame() {
                 ? "Rot ist Trumpf!" 
                 : callType === 'fuchs_und_Rote' 
                     ? "Fuchs und Rote!" 
-                    : `Called: ` + (prev.isFuchsImHaus ? "Fuchs im Haus - " : "") + `${cardObject.suit} ${cardObject.rank}`)
+                    : `${gameState.players[gameState.caller].name} Called: ` + (prev.isFuchsImHaus ? "Fuchs im Haus - " : "") + `${cardObject.suit} ${cardObject.rank}`)
         }));
     };
 
