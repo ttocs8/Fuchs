@@ -316,7 +316,7 @@ export default function FuchsGame() {
 
     // --- Scoring Logic ---
     const results = useMemo(() => {
-        if (gameState.phase !== 'counting') return null;
+        if (gameState.phase !== 'counting' || !gameState.teams) return null;
         let t1Points = 0, t2Points = 0;
         gameState.teams.team1.forEach(p => gameState.wonTricks[p].forEach(card => t1Points += card.points));
         gameState.teams.team2.forEach(p => gameState.wonTricks[p].forEach(card => t2Points += card.points));
