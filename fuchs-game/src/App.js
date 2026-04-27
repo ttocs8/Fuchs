@@ -317,11 +317,12 @@ export default function FuchsGame() {
     // --- Scoring Logic ---
     const results = useMemo(() => {
         if (gameState.phase !== 'counting') return null;
-        let t1Pts = 0, t2Points = 0;
+        let t1Points = 0, t2Points = 0;
         gameState.teams.team1.forEach(p => gameState.wonTricks[p].forEach(c => t1Pts += c.points));
         gameState.teams.team2.forEach(p => gameState.wonTricks[p].forEach(c => t2Points += c.points));
-        const winTeam = t1Pts >= 61 ? 'team1' : 'team2';
-        return { t1Pts, t2Points, winTeam };
+        const winTeam = t1Points >= 61 ? 0 : 1;
+        const userWon = gameState.teams[winTeam].includes(0);
+        return { t1Points, t2Points, winTeam, userWon };
     }, [gameState.phase, gameState.wonTricks, gameState.teams]);
 
     return (
@@ -338,8 +339,9 @@ export default function FuchsGame() {
             {gameState.phase === 'counting' && results && (
                 <div className="overlay">
                     <div className="end-panel">
-                        <h2>{results.winTeam === 'team1' ? 'Victory!' : 'Defeat!'}</h2>
+                        <h2>{results.userWon ? <span style="color: green">Victory!</span> : <span style="color: green">Defeat!</span>}</h2>
                         <div className="result-container">
+                            <h2>{results.winTeam === 0 ? 'Team 1 Wins!' : 'Team 2 Wins'}</h2>
                             <p>Team 1: {results.t1Pts} pts</p>
                             <p>Team 2: {results.t2Points} pts</p>
                         </div>
