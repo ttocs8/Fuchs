@@ -318,8 +318,8 @@ export default function FuchsGame() {
     const results = useMemo(() => {
         if (gameState.phase !== 'counting') return null;
         let t1Points = 0, t2Points = 0;
-        gameState.teams.team1.forEach(p => gameState.wonTricks[p].forEach(c => t1Pts += c.points));
-        gameState.teams.team2.forEach(p => gameState.wonTricks[p].forEach(c => t2Points += c.points));
+        gameState.teams.team1.forEach(p => gameState.wonTricks[p].forEach(card => t1Points += card.points));
+        gameState.teams.team2.forEach(p => gameState.wonTricks[p].forEach(card => t2Points += card.points));
         const winTeam = t1Points >= 61 ? 0 : 1;
         const userWon = gameState.teams[winTeam].includes(0);
         return { t1Points, t2Points, winTeam, userWon };
