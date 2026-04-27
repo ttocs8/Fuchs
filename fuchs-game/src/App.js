@@ -31,7 +31,7 @@ const DECK_TEMPLATE = [
     { id: 23, suit: 'Schelle', rank: 'Ober', points: 3, trumpRank: null, rankOrder: 4 }
 ].map(card => ({
     ...card,
-    image: `../public/images/cards/${card.suit.toLowerCase()}/${card.rank}.png`
+    image: `images/cards/${card.suit.toLowerCase()}/${card.rank}.png`
 }));
 
 // --- Utilities ---
