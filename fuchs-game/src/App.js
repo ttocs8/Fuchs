@@ -218,15 +218,15 @@ export default function FuchsGame() {
     };
 
     const playCard = (playerIndex, cardIndex) => {
+        // Block any input while the trick is full but hasn't cleared yet. thanks adam
+        if(gameState.trick.length >= 4) return;
+
         const player = gameState.players[playerIndex];
         const card = player.hand[cardIndex];
-
         if (!isLegalPlay(card, player.hand, gameState.trick, gameState.RotIsTrump, gameState.calledCard, gameState.playedSuits)) {
             setGameState(prev => ({ ...prev, status: "Illegal Play!" }));
             return;
         }
-        
-        if(gameState.trick.length == 4) return;
 
         const newHand = [...player.hand];
         newHand.splice(cardIndex, 1);
@@ -372,7 +372,7 @@ export default function FuchsGame() {
                                         key={card.id} 
                                         card={card} 
                                         hidden={i !== 0} 
-                                        onClick={() => i === 0 && gameState.currentPlayer === 0 && playCard(0, idx)}
+                                        onClick={() => i === 0 && gameState.currentPlayer === 0 && gameState.trick.length < 4 && playCard(0, idx)}
                                     />
                                 ))}
                             </AnimatePresence>
