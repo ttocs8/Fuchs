@@ -225,6 +225,8 @@ export default function FuchsGame() {
             setGameState(prev => ({ ...prev, status: "Illegal Play!" }));
             return;
         }
+        
+        if(gameState.trick.length == 4) return;
 
         const newHand = [...player.hand];
         newHand.splice(cardIndex, 1);
