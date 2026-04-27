@@ -292,7 +292,7 @@ export default function FuchsGame() {
                 const newWonTricks = [...gameState.wonTricks];
                 newWonTricks[winnerIdx] = [...newWonTricks[winnerIdx], ...trick.map(t => t.card)];
 
-                let trickWinnerText = `${prev.players[winnerIdx].name} takes the trick!`;
+                let trickWinnerText = `${gameState.players[winnerIdx].name} takes the trick!`;
                 if(winnerIdx == 0) trickWinnerText = `You took the trick!`;
 
                 setGameState(prev => ({
