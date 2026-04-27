@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/fuchs-game/static/css/main.c4e04516.css",
+    "main.js": "/fuchs-game/static/js/main.ba32abd9.js",
+    "static/js/453.7db3af87.chunk.js": "/fuchs-game/static/js/453.7db3af87.chunk.js",
+    "static/media/back.png": "/fuchs-game/static/media/back.05ddbcb2c1916482279d.png",
+    "index.html": "/fuchs-game/index.html",
+    "main.c4e04516.css.map": "/fuchs-game/static/css/main.c4e04516.css.map",
+    "main.ba32abd9.js.map": "/fuchs-game/static/js/main.ba32abd9.js.map",
+    "453.7db3af87.chunk.js.map": "/fuchs-game/static/js/453.7db3af87.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c4e04516.css",
+    "static/js/main.ba32abd9.js"
+  ]
+}
