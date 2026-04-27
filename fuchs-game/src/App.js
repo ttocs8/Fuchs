@@ -81,7 +81,7 @@ export default function FuchsGame() {
         playedSuits: new Set()
     });
 
-    // --- Original Logic Helpers ---
+    // --- Logic Helpers ---
     const isTrump = useCallback((card, rotIsTrump) => {
         return card.trumpRank !== null || (rotIsTrump && card.suit === 'Rot');
     }, []);
@@ -104,17 +104,41 @@ export default function FuchsGame() {
         if (trick.length === 0) return true;
         const leadCard = trick[0].card;
         const leadSuit = getEffectiveSuit(leadCard, rotIsTrump);
+        const cardSuit = getEffectiveSuit(card, rotIsTrump);
         const hasSuit = hand.some(c => getEffectiveSuit(c, rotIsTrump) === leadSuit);
 
-        if (hasSuit && getEffectiveSuit(card, rotIsTrump) !== leadSuit) return false;
-        if (!hasSuit) {
-            const hasTrump = hand.some(c => isTrump(c, rotIsTrump));
-            if (hasTrump && !isTrump(card, rotIsTrump)) return false;
+        // Must follow lead suit if you have it
+        if (hasSuit && cardSuit !== leadSuit) return false;
+
+        // If void in lead suit, must play trump if you have it
+        const hasTrump = hand.some(c => isTrump(c, rotIsTrump));
+        if (!hasSuit && hasTrump && !isTrump(card, rotIsTrump)) return false;
+
+        // Find the current highest card in the trick
+        let highest = trick[0];
+        for (let i = 1; i < trick.length; i++) {
+            if (beats(trick[i].card, highest.card, rotIsTrump)) {
+                highest = trick[i];
+            }
         }
-        
-        // Rule about the "Called Ace" (Gsuchte) - logic parity with original
+
+        // Determine which suit the player is constrained to play
+        // (lead suit if they have it, trump if they're void and have trump, otherwise free)
+        const mustPlaySuit = hasSuit ? leadSuit : (hasTrump ? 'trump' : null);
+
+        // If constrained to a suit, check if any card in that suit beats the current highest.
+        // If yes, the player MUST play a card that beats it
+        if (mustPlaySuit) {
+            const canBeat = hand.some(c =>
+                getEffectiveSuit(c, rotIsTrump) === mustPlaySuit &&
+                beats(c, highest.card, rotIsTrump)
+            );
+            if (canBeat && !beats(card, highest.card, rotIsTrump)) return false;
+        }
+
+        // Called card protection: cannot play the called card to a foreign suit early
         if (calledCard && card.suit === calledCard.suit && card.rank === calledCard.rank) {
-            if (getEffectiveSuit(card, rotIsTrump) !== leadSuit && trick.length > 0 && !playedSuits.has(card.suit)) {
+            if (cardSuit !== leadSuit && trick.length > 0 && !playedSuits.has(card.suit)) {
                 return false;
             }
         }
