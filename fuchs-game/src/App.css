@@ -1,0 +1,280 @@
+:root {
+    --card-w: 100px;
+    --card-h: 155px;
+    --card-overlap: -30px;
+    --status-fs: 1.2rem;
+    --modal-padding: 40px;
+}
+
+.game-wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, #2d5a27 0%, #1a3c16 100%);
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+.board {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.status-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: var(--status-fs);
+    z-index: 5;
+    white-space: nowrap;
+}
+
+/* Player Slot Layout */
+.player-slot {
+    position: absolute;
+}
+
+.player-slot.active .player-info {
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 15px #FFD700;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.player-info {
+    background: rgba(0,0,0,0.5);
+    padding: 5px 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.player-0 { bottom: 2vh; left: 50%; transform: translateX(-50%); }
+.player-1 { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
+.player-2 { top: 8vh; left: 50%; transform: translateX(-50%); }
+.player-3 { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+
+/* Hand & Cards */
+.hand {
+    display: flex;
+    gap: var(--card-overlap);
+    justify-content: center;
+    width: calc(var(--card-w) * 6 + var(--card-overlap) * 5);
+}
+
+.card {
+    width: var(--card-w);
+    height: var(--card-h);
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #999;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.card.back {
+    background: url('../public/images/back.png') center/cover;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Trick Area */
+.trick-area {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 25vw;
+    height: 20vh;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.played-card {
+    position: absolute;
+    width: var(--card-w);
+}
+
+.played-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    display: block;
+}
+
+.pos-0 { top: 100%; left: 40%; transform: translateX(-50%); }
+.pos-1 { right: 70%; top: 50%; transform: translateY(-50%); }
+.pos-2 { top: 0; left: 40%; transform: translateX(-50%); }
+.pos-3 { left: 70%; top: 50%; transform: translateY(-50%); }
+
+/* Modals & Overlays */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content, .menu-card, .end-panel {
+    background: #f0f0f0;
+    color: #333;
+    padding: var(--modal-padding);
+    border-radius: 20px;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.hand-preview-fanned {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 12px;
+}
+
+.suit-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.suit-label {
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.suit-cards {
+    display: flex;
+    gap: -15px; /* Overlap cards within the same suit */
+}
+
+.calling-mini-card {
+    width: 50px;
+    height: 78px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+}
+
+.divider {
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.call-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.call-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.call-btn:hover { transform: scale(1.05); }
+
+.call-btn.eichel { background: #D2B48C; color: #333; }
+.call-btn.grun { background: #228B22; }
+.call-btn.rot { background: #C41E3A; }
+.call-btn.schelle { background: #FFD700; color: #333; }
+
+.hand-preview {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.mini-card {
+    width: 40px;
+    height: 60px;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background: #228B22;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.badge {
+    background: #FF4500;
+    color: white;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    :root {
+        --card-w: 80px;
+        --card-h: 124px;
+        --card-overlap: -25px;
+        --status-fs: 1rem;
+        --modal-padding: 30px;
+    }
+    .trick-area {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --card-w: 60px;
+        --card-h: 93px;
+        --card-overlap: -20px;
+        --status-fs: 0.85rem;
+        --modal-padding: 20px;
+    }
+    .trick-area {
+        width: 120px;
+        height: 120px;
+    }
+    .call-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+    .player-info {
+        padding: 3px 8px;
+    }
+}
