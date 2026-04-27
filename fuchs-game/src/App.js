@@ -342,7 +342,7 @@ export default function FuchsGame() {
                         <h2>{results.userWon ? <span style="color: green">Victory!</span> : <span style="color: green">Defeat!</span>}</h2>
                         <div className="result-container">
                             <h2>{results.winTeam === 0 ? 'Team 1 Wins!' : 'Team 2 Wins'}</h2>
-                            <p>Team 1: {results.t1Pts} pts</p>
+                            <p>Team 1: {results.t1Points} pts</p>
                             <p>Team 2: {results.t2Points} pts</p>
                         </div>
                         <button className="btn-primary" onClick={() => setGameState(prev => ({ ...prev, phase: 'menu', dealer: (prev.dealer + 1) % 4 }))}>Play Again</button>
