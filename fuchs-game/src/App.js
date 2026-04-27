@@ -181,18 +181,18 @@ export default function FuchsGame() {
 
         if (callType === 'Rot_is_trump') {
             rotIsTrump = true;
-            teams = { team1: [gameState.caller], team2: [0, 1, 2, 3].filter(p => p !== gameState.caller) };
+            teams = { 0: [gameState.caller], 1: [0, 1, 2, 3].filter(p => p !== gameState.caller) };
         } else if (callType === 'fuchs_und_Rote') {
             isFuchsGame = true;
             rotIsTrump = true; // Traditionally Fuchs und Rote implies Rot is trump solo
-            teams = { team1: [gameState.caller], team2: [0, 1, 2, 3].filter(p => p !== gameState.caller) };
+            teams = { 0: [gameState.caller], 1: [0, 1, 2, 3].filter(p => p !== gameState.caller) };
         } else {
             // Partner call
             const called = cardObject;
             for (let p = 0; p < 4; p++) {
                 if (p !== gameState.caller && gameState.players[p].hand.some(c => c.id === called.id)) {
                     partner = p;
-                    teams = { team1: [gameState.caller, p], team2: [0, 1, 2, 3].filter(q => q !== gameState.caller && q !== p) };
+                    teams = { 0: [gameState.caller, p], 1: [0, 1, 2, 3].filter(q => q !== gameState.caller && q !== p) };
                     break;
                 }
             }
@@ -318,11 +318,22 @@ export default function FuchsGame() {
     const results = useMemo(() => {
         if (gameState.phase !== 'counting' || !gameState.teams) return null;
         let t1Points = 0, t2Points = 0;
-        gameState.teams.team1.forEach(p => gameState.wonTricks[p].forEach(card => t1Points += card.points));
-        gameState.teams.team2.forEach(p => gameState.wonTricks[p].forEach(card => t2Points += card.points));
-        const winTeam = t1Points >= 61 ? 0 : 1;
-        const userWon = gameState.teams[winTeam].includes(0);
-        return { t1Points, t2Points, winTeam, userWon };
+        gameState.teams[0].forEach(p => gameState.wonTricks[p].forEach(card => t1Points += card.points));
+        gameState.teams[1].forEach(p => gameState.wonTricks[p].forEach(card => t2Points += card.points));
+        let winningTeamInfo = null, losingTeamInfo = null;
+
+        if(t1Points >= 61){
+            winningTeamInfo = {team: 0, points: t1Points, playerNames: gameState.teams[0].map(p => gameState.players[p].name)};
+            losingTeamInfo = {team: 1, points: t2Points, playerNames: gameState.teams[1].map(p => gameState.players[p].name)};
+        }
+        else if(t2Points >= 61){
+            winningTeamInfo = {team: 1, points: t2Points, playerNames: gameState.teams[1].map(p => gameState.players[p].name)};
+            losingTeamInfo = {team: 0, points: t1Points, playerNames: gameState.teams[0].map(p => gameState.players[p].name)};
+        }
+       
+ 
+        const  isUserWin = gameState.teams[winningTeamInfo.team].includes(0);
+        return { t1Points, t2Points, winningTeamInfo, losingTeamInfo,isUserWin };
     }, [gameState.phase, gameState.wonTricks, gameState.teams]);
 
     return (
@@ -339,11 +350,11 @@ export default function FuchsGame() {
             {gameState.phase === 'counting' && results && (
                 <div className="overlay">
                     <div className="end-panel">
-                        <h2>{results.userWon ? <span style="color: green">Victory!</span> : <span style="color: green">Defeat!</span>}</h2>
+                        <h2>{results.isUserWin ? "Victory!" : "Defeat!"}</h2>
                         <div className="result-container">
-                            <h2>{results.winTeam === 0 ? 'Team 1 Wins!' : 'Team 2 Wins'}</h2>
-                            <p>Team 1: {results.t1Points} pts</p>
-                            <p>Team 2: {results.t2Points} pts</p>
+                            <h2>{results.winningTeamInfo.team == 0 ? 'Team 1 Wins!' : 'Team 2 Wins'}</h2>
+                            <p>Team {results.winningTeamInfo.team + 1} - {results.winningTeamInfo.playerNames[0]} and {results.winningTeamInfo.playerNames[1]}: {results.winningTeamInfo.points} pts</p>
+                            <p>Team {results.losingTeamInfo.team + 1} - {results.losingTeamInfo.playerNames[0]} and {results.losingTeamInfo.playerNames[1]}: {results.losingTeamInfo.points} pts</p>
                         </div>
                         <button className="btn-primary" onClick={() => setGameState(prev => ({ ...prev, phase: 'menu', dealer: (prev.dealer + 1) % 4 }))}>Play Again</button>
                     </div>
