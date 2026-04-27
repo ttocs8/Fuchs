@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
-// --- Constants & Data (Preserving Original deckTemplate) ---
-const SUITS = ['Eichel', 'Grun', 'Rot', 'Schelle'];
+// --- Constants & Data ---
+//const SUITS = ['Eichel', 'Grun', 'Rot', 'Schelle'];
 const DECK_TEMPLATE = [
     { id: 0, suit: 'Eichel', rank: 'Ober', points: 4, trumpRank: 1 },
     { id: 1, suit: 'Grun', rank: 'Ober', points: 3, trumpRank: 2 },
@@ -154,7 +154,7 @@ export default function FuchsGame() {
             hand: deck.slice(i * 6, (i + 1) * 6).sort(sortHand)
         }));
 
-        // Find who has Grosse Fuchs (Eichel Ober)
+        // Find who has Grosse Fuchs
         const callerIndex = newPlayers.findIndex(p => p.hand.some(c => c.id === 0));
         
         setGameState(prev => ({
@@ -292,13 +292,16 @@ export default function FuchsGame() {
                 const newWonTricks = [...gameState.wonTricks];
                 newWonTricks[winnerIdx] = [...newWonTricks[winnerIdx], ...trick.map(t => t.card)];
 
+                let trickWinnerText = `${prev.players[winnerIdx].name} takes the trick!`;
+                if(winnerIdx == 0) trickWinnerText = `You took the trick!`;
+
                 setGameState(prev => ({
                     ...prev,
                     wonTricks: newWonTricks,
                     trick: [],
                     currentPlayer: winnerIdx,
                     lastWinner: winnerIdx,
-                    status: `${prev.players[winnerIdx].name} takes the trick!`
+                    status: trickWinnerText
                 }));
 
                 if (gameState.players.every(p => p.hand.length === 0)) {
@@ -309,7 +312,7 @@ export default function FuchsGame() {
         }
     }, [gameState.trick]);
 
-    // --- Scoring Logic (Preserved) ---
+    // --- Scoring Logic ---
     const results = useMemo(() => {
         if (gameState.phase !== 'counting') return null;
         let t1Pts = 0, t2Points = 0;
