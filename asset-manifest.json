@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Fuchs/static/css/main.50396c85.css",
-    "main.js": "/Fuchs/static/js/main.fbc0e25a.js",
+    "main.js": "/Fuchs/static/js/main.2d68c553.js",
     "static/js/453.7db3af87.chunk.js": "/Fuchs/static/js/453.7db3af87.chunk.js",
     "static/media/back.png": "/Fuchs/static/media/back.05ddbcb2c1916482279d.png",
     "index.html": "/Fuchs/index.html",
     "main.50396c85.css.map": "/Fuchs/static/css/main.50396c85.css.map",
-    "main.fbc0e25a.js.map": "/Fuchs/static/js/main.fbc0e25a.js.map",
+    "main.2d68c553.js.map": "/Fuchs/static/js/main.2d68c553.js.map",
     "453.7db3af87.chunk.js.map": "/Fuchs/static/js/453.7db3af87.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.50396c85.css",
-    "static/js/main.fbc0e25a.js"
+    "static/js/main.2d68c553.js"
   ]
 }
