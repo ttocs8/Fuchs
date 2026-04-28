@@ -301,7 +301,7 @@
 }
 
 
-@media (max-width: 450px) {
+@media (max-width: 450px), (max-height: 900px) {
     :root {
         --card-w: 40px;
         --card-h: 62px;
@@ -330,7 +330,8 @@
         justify-content: center;
         width: calc(var(--card-w) * 6 + var(--card-overlap) * 5);
     }
-    
+    .player-0 { bottom: 12vh; left: 50%; transform: translateX(-50%); }
+
     .pos-0 { top: 140%; left: 25%; transform: translateX(-50%); }
     .pos-1 { right: 70%; top: 50%; transform: translateY(-50%); }
     .pos-2 { top: -40%; left: 25%; transform: translateX(-50%); }
