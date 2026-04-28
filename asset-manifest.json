@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/Fuchs/static/css/main.ce1c0db1.css",
+    "main.css": "/Fuchs/static/css/main.746221f5.css",
     "main.js": "/Fuchs/static/js/main.2f7aa1b2.js",
     "static/js/453.7db3af87.chunk.js": "/Fuchs/static/js/453.7db3af87.chunk.js",
+    "static/media/donaubg.png": "/Fuchs/static/media/donaubg.8d32bbdc9c7f2612d515.png",
     "static/media/back.png": "/Fuchs/static/media/back.05ddbcb2c1916482279d.png",
     "index.html": "/Fuchs/index.html",
-    "main.ce1c0db1.css.map": "/Fuchs/static/css/main.ce1c0db1.css.map",
+    "main.746221f5.css.map": "/Fuchs/static/css/main.746221f5.css.map",
     "main.2f7aa1b2.js.map": "/Fuchs/static/js/main.2f7aa1b2.js.map",
     "453.7db3af87.chunk.js.map": "/Fuchs/static/js/453.7db3af87.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ce1c0db1.css",
+    "static/css/main.746221f5.css",
     "static/js/main.2f7aa1b2.js"
   ]
 }
