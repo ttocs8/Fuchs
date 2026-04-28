@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
+import Background from './images/donaubg.png';
 
 // --- Constants & Data ---
 //const SUITS = ['Eichel', 'Grun', 'Rot', 'Schelle'];
@@ -336,7 +337,7 @@ export default function FuchsGame() {
     }, [gameState.phase, gameState.wonTricks, gameState.teams]);
 
     return (
-        <div className="game-wrapper">
+        <div className="game-wrapper" style={{backgroundImage: `url(${Background})`}}>
             {gameState.phase === 'menu' && (
                 <div className="overlay">
                     <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="menu-card">
