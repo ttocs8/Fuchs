@@ -331,9 +331,8 @@ export default function FuchsGame() {
             losingTeamInfo = {team: 0, points: t1Points, playerNames: gameState.teams[0].map(p => gameState.players[p].name)};
         }
        
- 
         const  isUserWin = gameState.teams[winningTeamInfo.team].includes(0);
-        return { t1Points, t2Points, winningTeamInfo, losingTeamInfo,isUserWin };
+        return { t1Points, t2Points, winningTeamInfo, losingTeamInfo, isUserWin };
     }, [gameState.phase, gameState.wonTricks, gameState.teams]);
 
     return (
@@ -353,8 +352,9 @@ export default function FuchsGame() {
                         <h2>{results.isUserWin ? "Victory!" : "Defeat!"}</h2>
                         <div className="result-container">
                             <h2>{results.winningTeamInfo.team == 0 ? 'Team 1 Wins!' : 'Team 2 Wins'}</h2>
-                            <p>Team {results.winningTeamInfo.team + 1} - {results.winningTeamInfo.playerNames[0]} and {results.winningTeamInfo.playerNames[1]}: {results.winningTeamInfo.points} pts</p>
-                            <p>Team {results.losingTeamInfo.team + 1} - {results.losingTeamInfo.playerNames[0]} and {results.losingTeamInfo.playerNames[1]}: {results.losingTeamInfo.points} pts</p>
+
+                            <DisplayResultsTextComponentSwitcher res={results}/>
+                            
                         </div>
                         <button className="btn-primary" onClick={() => setGameState(prev => ({ ...prev, phase: 'menu', dealer: (prev.dealer + 1) % 4 }))}>Play Again</button>
                     </div>
@@ -410,6 +410,62 @@ export default function FuchsGame() {
                     </AnimatePresence>
                 </div>
             </div>
+        </div>
+    );
+}
+function DisplayResultsTextComponentSwitcher({ res }) {
+    let numWinners = res.winningTeamInfo.playerNames.length;
+
+    switch (numWinners) {
+        case 1:
+            return <DisplayResultsText_1v3 res={res}/>
+        case 3:
+            return <DisplayResultsText_3v1 res={res}/>
+        default:
+            return <DisplayResultsText res={res}/>
+    }
+} 
+
+function DisplayResultsText_1v3({ res }) {
+
+    return ( 
+        <div className="result-container">
+            <p className="resultsText">
+                Team {res.winningTeamInfo.team + 1} - {res.winningTeamInfo.playerNames[0]}: {res.winningTeamInfo.points} pts
+            </p>
+            <p className="resultsText">
+                Team {res.losingTeamInfo.team + 1} - {res.losingTeamInfo.playerNames[0]}, {res.losingTeamInfo.playerNames[1]} and {res.losingTeamInfo.playerNames[2]}: {res.losingTeamInfo.points} pts
+            </p> 
+        </div>
+    );
+      
+}
+
+function DisplayResultsText_3v1({ res }) {
+
+    return ( 
+        <div className="result-container">
+            <p className="resultsText">
+                Team {res.winningTeamInfo.team + 1} - {res.winningTeamInfo.playerNames[0]}, {res.winningTeamInfo.playerNames[1]} and {res.winningTeamInfo.playerNames[2]}: {res.winningTeamInfo.points} pts
+            </p>
+            <p className="resultsText">
+                Team {res.losingTeamInfo.team + 1} - {res.losingTeamInfo.playerNames[0]}: {res.losingTeamInfo.points} pts
+            </p> 
+        </div>
+    );
+      
+}
+
+function DisplayResultsText({ res }) {
+    
+    return ( 
+        <div className="result-container">
+            <p className="resultsText">
+                Team {res.winningTeamInfo.team + 1} - {res.winningTeamInfo.playerNames[0]} and {res.winningTeamInfo.playerNames[1]}: {res.winningTeamInfo.points} pts
+            </p>
+            <p className="resultsText">    
+                Team {res.losingTeamInfo.team + 1} - {res.losingTeamInfo.playerNames[0]} and {res.losingTeamInfo.playerNames[1]}: {res.losingTeamInfo.points} pts
+            </p> 
         </div>
     );
 }
